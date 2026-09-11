@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="2026年9月12日から14日までの八戸・函館・札幌旅行の行程表">
+  <title>八戸・函館・札幌 旅行行程表</title>
+  <style>
+    :root { color-scheme: light; --ink:#243247; --muted:#617089; --line:#dbe3ee; --surface:#fff; --canvas:#f3f6fa; --brand:#176b87; --brand-dark:#0d4e65; --transport:#1565a5; --sightseeing:#9a4c0e; --food:#8a3369; --stay:#5f3a9c; --shadow:0 12px 30px rgba(24,49,78,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",sans-serif; line-height:1.7; }
+    a { color:var(--brand-dark); }
+    a:focus-visible { outline:3px solid #f4b942; outline-offset:3px; border-radius:4px; }
+    .hero { padding:3.5rem 1.25rem 3rem; color:#fff; background:linear-gradient(135deg,#0d5068,#1b7d87 58%,#77a9a2); }
+    .hero__inner, main { max-width:1020px; margin:0 auto; }
+    .eyebrow { margin:0 0 .4rem; font-size:.82rem; font-weight:700; letter-spacing:.12em; opacity:.86; }
+    h1 { margin:0; font-size:clamp(1.8rem,4vw,2.8rem); line-height:1.25; }
+    .lead { max-width:42rem; margin:1rem 0 0; color:#e4f3f3; }
+    .jump-nav { display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.5rem; }
+    .jump-nav a { padding:.35rem .7rem; color:#fff; text-decoration:none; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:.9rem; }
+    .jump-nav a:hover { background:rgba(255,255,255,.16); }
+    main { padding:2rem 1.25rem 4rem; }
+    .legend { display:flex; flex-wrap:wrap; gap:.7rem 1rem; align-items:center; margin-bottom:1.5rem; color:var(--muted); font-size:.9rem; }
+    .badge { display:inline-block; margin-right:.4rem; padding:.12rem .48rem; border-radius:5px; color:#fff; font-size:.7rem; font-weight:800; letter-spacing:.04em; line-height:1.5; vertical-align:.12em; }
+    .badge--transport { background:var(--transport); } .badge--sightseeing { background:var(--sightseeing); } .badge--food { background:var(--food); } .badge--stay { background:var(--stay); }
+    .day-card { margin:0 0 1.5rem; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .day-card__header { padding:1.25rem 1.4rem 1.15rem; background:#edf7f7; border-bottom:1px solid var(--line); }
+    .day-card__header p { margin:0; color:var(--brand-dark); font-size:.9rem; font-weight:700; }
+    h2 { margin:.15rem 0 0; font-size:clamp(1.15rem,2.5vw,1.45rem); line-height:1.45; }
+    .timeline { list-style:none; margin:0; padding:.65rem 1.4rem 1rem; }
+    .event { position:relative; display:grid; grid-template-columns:4.3rem 1fr; gap:1rem; padding:.85rem 0 .95rem; border-bottom:1px solid #edf0f5; }
+    .event:last-child { border-bottom:0; }
+    .event::before { position:absolute; top:1.25rem; bottom:-1.1rem; left:1.95rem; width:2px; content:""; background:#cce2e3; }
+    .event:last-child::before { display:none; }
+    .event__time { position:relative; z-index:1; display:block; width:max-content; padding-top:.05rem; color:var(--brand-dark); background:var(--surface); font-size:1.05rem; font-weight:800; font-variant-numeric:tabular-nums; }
+    .event__body { min-width:0; }
+    .event__title { margin:0; font-size:1rem; }
+    .event__detail { margin:.22rem 0 0; color:var(--muted); font-size:.9rem; }
+    .event__links { display:flex; flex-wrap:wrap; gap:.35rem .75rem; margin-top:.35rem; font-size:.84rem; }
+    .event__links a { font-weight:700; text-underline-offset:2px; }
+    .reserved { display:inline-block; margin-left:.35rem; padding:.05rem .4rem; color:#765018; background:#fff4d6; border:1px solid #edd28a; border-radius:4px; font-size:.72rem; font-weight:700; vertical-align:.1em; }
+    .note { margin:.35rem 1.4rem 1.25rem; padding:.7rem .85rem; color:#5d4c25; background:#fff9e9; border-left:4px solid #e4b94e; font-size:.84rem; }
+    .footer-note { margin:1.5rem 0 0; color:var(--muted); font-size:.85rem; }
+    @media (max-width:560px) { .hero{padding:2.5rem 1rem 2.2rem;} main{padding:1.25rem .75rem 3rem;} .day-card__header{padding:1rem;} .timeline{padding-right:1rem;padding-left:1rem;} .event{grid-template-columns:3.5rem 1fr;gap:.7rem;} .event::before{left:1.55rem;} .note{margin-right:1rem;margin-left:1rem;} }
+    @media print { body{background:#fff;} .hero{padding:1rem 0;color:#000;background:#fff;} .lead,.jump-nav,.legend,.footer-note{display:none;} main{padding:1rem 0;} .day-card{break-inside:avoid;box-shadow:none;} a{color:#000;} }
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero__inner">
+    <p class="eyebrow">TRAVEL ITINERARY · 2026.09.12 — 09.14</p>
+    <h1>八戸・函館・札幌 3日間の旅</h1>
+    <p class="lead">移動の時刻と訪問先を、日ごとのタイムラインにまとめています。リンクから各交通機関の時刻表と訪問先の地図を確認できます。</p>
+    <nav class="jump-nav" aria-label="日程へのリンク"><a href="#day1">1日目 八戸・函館</a><a href="#day2">2日目 函館</a><a href="#day3">3日目 札幌・帰路</a></nav>
+  </div></header>
+  <main>
+    <div class="legend" aria-label="行程の凡例"><span><span class="badge badge--transport">交通</span>公共交通・移動</span><span><span class="badge badge--sightseeing">観光</span>観光・施設</span><span><span class="badge badge--food">食事</span>食事</span><span><span class="badge badge--stay">宿泊</span>ホテル</span><span class="reserved">予約済み</span></div>
+
+    <section class="day-card" id="day1" aria-labelledby="day1-title">
+      <div class="day-card__header"><p>DAY 01 · 2026年9月12日（土）</p><h2 id="day1-title">八戸観光～フェリーで函館へ</h2></div>
+      <ol class="timeline">
+        <li class="event"><time class="event__time" datetime="2026-09-12T06:56">06:56</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=東京駅" target="_blank" rel="noopener noreferrer">東京駅</a> 発（東北新幹線 はやぶさ）<span class="reserved">予約済み</span></p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T09:43">09:43</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=八戸駅" target="_blank" rel="noopener noreferrer">八戸駅</a> 着</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T10:42">10:42</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=八戸駅" target="_blank" rel="noopener noreferrer">八戸駅</a> 発（JR八戸線 鮫行）</p><div class="event__links"><a href="https://timetables.jreast.co.jp/timetable/list1230.html" target="_blank" rel="noopener noreferrer">時刻表（JR八戸線）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T11:06">11:06</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=鮫駅" target="_blank" rel="noopener noreferrer">鮫駅</a> 着</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T11:20">11:20</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span><a href="https://www.google.com/maps/search/?api=1&amp;query=蕪嶋神社" target="_blank" rel="noopener noreferrer">蕪嶋神社</a></p><p class="event__detail">鮫駅から徒歩約15分</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T12:14">12:14</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>鮫駅または蕪嶋神社周辺から種差海岸遊覧バス「うみねこ号」乗車</p><div class="event__links"><a href="https://www.city.hachinohe.aomori.jp/section/bus/onecoin_uminekogou.html" target="_blank" rel="noopener noreferrer">時刻表（うみねこ号）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T12:25">12:25</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span><a href="https://www.google.com/maps/search/?api=1&amp;query=葦毛崎展望台" target="_blank" rel="noopener noreferrer">葦毛崎展望台</a></p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T13:43">13:43</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>葦毛崎展望台前から「うみねこ号」で鮫駅へ戻る</p><div class="event__links"><a href="https://www.city.hachinohe.aomori.jp/section/bus/onecoin_uminekogou.html" target="_blank" rel="noopener noreferrer">時刻表（うみねこ号）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T14:00">14:00</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=鮫駅" target="_blank" rel="noopener noreferrer">鮫駅</a> 着</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T14:11">14:11</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=鮫駅" target="_blank" rel="noopener noreferrer">鮫駅</a> 発（JR八戸線 八戸行）</p><div class="event__links"><a href="https://timetables.jreast.co.jp/timetable/list1230.html" target="_blank" rel="noopener noreferrer">時刻表（JR八戸線）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T14:35">14:35</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=八戸駅" target="_blank" rel="noopener noreferrer">八戸駅</a> 着</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T15:06">15:06</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=八戸駅" target="_blank" rel="noopener noreferrer">八戸駅</a> 発（東北新幹線 はやぶさ）</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T15:33">15:33</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=新青森駅" target="_blank" rel="noopener noreferrer">新青森駅</a> 着</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T15:45">15:45</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=新青森駅" target="_blank" rel="noopener noreferrer">新青森駅</a>からタクシーで<a href="https://www.google.com/maps/search/?api=1&amp;query=津軽海峡フェリー+青森ターミナル" target="_blank" rel="noopener noreferrer">フェリーターミナル</a>へ</p><p class="event__detail">約10〜15分</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T16:15">16:15</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=津軽海峡フェリー+青森ターミナル" target="_blank" rel="noopener noreferrer">津軽海峡フェリー 青森ターミナル</a>到着・乗船手続き</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T17:00">17:00</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>青森港 発（津軽海峡フェリー）</p><div class="event__links"><a href="https://www.tsugarukaikyo.co.jp/service/timetable/hakodate-aomori/" target="_blank" rel="noopener noreferrer">時刻表（津軽海峡フェリー）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T20:40">20:40</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=津軽海峡フェリー+函館ターミナル" target="_blank" rel="noopener noreferrer">函館港</a> 着</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T21:00">21:00</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>タクシーでホテルへ移動</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-12T21:30">21:30</time><div class="event__body"><p class="event__title"><span class="badge badge--stay">宿泊</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Tabist+アネックスホテルテトラ+函館五稜郭" target="_blank" rel="noopener noreferrer">Tabist アネックスホテルテトラ 函館五稜郭</a> チェックイン</p></div></li>
+      </ol>
+      <p class="note">JR八戸線とうみねこ号は、出発前に最新の公式時刻表をご確認ください。掲載時刻はこの旅程の予定時刻です。</p>
+    </section>
+
+    <section class="day-card" id="day2" aria-labelledby="day2-title">
+      <div class="day-card__header"><p>DAY 02 · 2026年9月13日（日）</p><h2 id="day2-title">函館満喫</h2></div>
+      <ol class="timeline">
+        <li class="event"><time class="event__time" datetime="2026-09-13T09:00">09:00</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>ホテル出発（五稜郭エリアはホテルから徒歩圏内です）</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T09:15">09:15</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span><a href="https://www.google.com/maps/search/?api=1&amp;query=五稜郭公園" target="_blank" rel="noopener noreferrer">五稜郭</a>・<a href="https://www.google.com/maps/search/?api=1&amp;query=五稜郭タワー" target="_blank" rel="noopener noreferrer">五稜郭タワー</a></p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T11:30">11:30</time><div class="event__body"><p class="event__title"><span class="badge badge--food">食事</span><a href="https://www.google.com/maps/search/?api=1&amp;query=ラッキーピエロ+五稜郭公園前店" target="_blank" rel="noopener noreferrer">ラッキーピエロ 五稜郭公園前店</a></p><p class="event__detail">ご当地バーガーを満喫</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T12:45">12:45</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>市電「<a href="https://www.google.com/maps/search/?api=1&amp;query=五稜郭公園前駅" target="_blank" rel="noopener noreferrer">五稜郭公園前駅</a>」から「<a href="https://www.google.com/maps/search/?api=1&amp;query=十字街駅+函館" target="_blank" rel="noopener noreferrer">十字街駅</a>」へ移動</p><div class="event__links"><a href="https://www.city.hakodate.hokkaido.jp/docs/2014012100939/" target="_blank" rel="noopener noreferrer">時刻表（函館市電）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T13:30">13:30</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span>ベイエリア散策（<a href="https://www.google.com/maps/search/?api=1&amp;query=はこだて明治館" target="_blank" rel="noopener noreferrer">はこだて明治館</a>、<a href="https://www.google.com/maps/search/?api=1&amp;query=金森赤レンガ倉庫" target="_blank" rel="noopener noreferrer">金森赤レンガ倉庫</a>）</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T15:00">15:00</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span>元町エリア散策</p><p class="event__detail"><a href="https://www.google.com/maps/search/?api=1&amp;query=八幡坂+函館" target="_blank" rel="noopener noreferrer">八幡坂</a>、<a href="https://www.google.com/maps/search/?api=1&amp;query=旧函館区公会堂" target="_blank" rel="noopener noreferrer">旧函館区公会堂</a>、<a href="https://www.google.com/maps/search/?api=1&amp;query=函館ハリストス正教会" target="_blank" rel="noopener noreferrer">函館ハリストス正教会</a>、<a href="https://www.google.com/maps/search/?api=1&amp;query=函館聖マリア教会" target="_blank" rel="noopener noreferrer">函館聖マリア教会</a>を巡ります</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T16:30">16:30</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>市電「十字街駅」などから「<a href="https://www.google.com/maps/search/?api=1&amp;query=谷地頭駅+函館" target="_blank" rel="noopener noreferrer">谷地頭駅</a>」へ移動、その後徒歩約15分</p><div class="event__links"><a href="https://www.city.hakodate.hokkaido.jp/docs/2014012100939/" target="_blank" rel="noopener noreferrer">時刻表（函館市電）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T17:00">17:00</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span><a href="https://www.google.com/maps/search/?api=1&amp;query=立待岬" target="_blank" rel="noopener noreferrer">立待岬</a></p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T18:00">18:00</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>徒歩と市電（またはタクシー）で<a href="https://www.google.com/maps/search/?api=1&amp;query=函館山ロープウェイ+山麓駅" target="_blank" rel="noopener noreferrer">函館山ロープウェイ山麓駅</a>へ移動</p><div class="event__links"><a href="https://www.city.hakodate.hokkaido.jp/docs/2014012100939/" target="_blank" rel="noopener noreferrer">時刻表（函館市電）</a><a href="https://334.co.jp/" target="_blank" rel="noopener noreferrer">時刻表（函館山ロープウェイ）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T18:30">18:30</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span><a href="https://www.google.com/maps/search/?api=1&amp;query=函館山展望台" target="_blank" rel="noopener noreferrer">函館山展望台</a>（夜景観賞）</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T20:00">20:00</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span>ロープウェイで下山、函館市内で夕食（海鮮や塩ラーメンなど）</p><div class="event__links"><a href="https://334.co.jp/" target="_blank" rel="noopener noreferrer">時刻表（函館山ロープウェイ）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-13T21:30">21:30</time><div class="event__body"><p class="event__title"><span class="badge badge--stay">宿泊</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Tabist+アネックスホテルテトラ+函館五稜郭" target="_blank" rel="noopener noreferrer">ホテル</a>帰着</p></div></li>
+      </ol>
+    </section>
+
+    <section class="day-card" id="day3" aria-labelledby="day3-title">
+      <div class="day-card__header"><p>DAY 03 · 2026年9月14日（月）</p><h2 id="day3-title">札幌経由で帰路へ</h2></div>
+      <ol class="timeline">
+        <li class="event"><time class="event__time" datetime="2026-09-14T09:00">09:00</time><div class="event__body"><p class="event__title"><span class="badge badge--stay">宿泊</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Tabist+アネックスホテルテトラ+函館五稜郭" target="_blank" rel="noopener noreferrer">ホテル</a> チェックアウト</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T09:30">09:30</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=函館駅" target="_blank" rel="noopener noreferrer">函館駅</a>へ移動（市電またはタクシー）</p><div class="event__links"><a href="https://www.city.hakodate.hokkaido.jp/docs/2014012100939/" target="_blank" rel="noopener noreferrer">時刻表（函館市電）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T10:05">10:05</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=函館駅" target="_blank" rel="noopener noreferrer">函館駅</a> 発（<a href="https://jrhokkaidonorikae.com/vtime/vtime.php?s=150" target="_blank" rel="noopener noreferrer">特急北斗7号</a> 札幌行）</p><div class="event__links"><a href="https://jrhokkaidonorikae.com/vtime/vtime.php?s=150" target="_blank" rel="noopener noreferrer">時刻表（特急北斗）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T13:53">13:53</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=札幌駅" target="_blank" rel="noopener noreferrer">札幌駅</a> 着</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T14:10">14:10</time><div class="event__body"><p class="event__title"><span class="badge badge--sightseeing">観光</span><a href="https://www.google.com/maps/search/?api=1&amp;query=ポケモンセンターサッポロ" target="_blank" rel="noopener noreferrer">ポケモンセンターサッポロ</a>（<a href="https://www.google.com/maps/search/?api=1&amp;query=大丸札幌店" target="_blank" rel="noopener noreferrer">大丸札幌店</a>8階）および札幌駅周辺での買い物や遅めの昼食</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T17:00">17:00</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=札幌駅" target="_blank" rel="noopener noreferrer">札幌駅</a> 発（JR快速エアポート）</p><div class="event__links"><a href="https://www.jrhokkaido.co.jp/airport/index.html" target="_blank" rel="noopener noreferrer">時刻表（快速エアポート）</a></div></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T17:39">17:39</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=新千歳空港" target="_blank" rel="noopener noreferrer">新千歳空港</a> 着（夕食やお土産購入の最後の時間）</p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T19:10">19:10</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=新千歳空港" target="_blank" rel="noopener noreferrer">新千歳空港</a> 発（SKY 726便）<span class="reserved">予約済み</span></p></div></li>
+        <li class="event"><time class="event__time" datetime="2026-09-14T20:50">20:50</time><div class="event__body"><p class="event__title"><span class="badge badge--transport">交通</span><a href="https://www.google.com/maps/search/?api=1&amp;query=羽田空港" target="_blank" rel="noopener noreferrer">羽田空港</a> 着</p></div></li>
+      </ol>
+    </section>
+    <p class="footer-note">※時刻は予定です。運行状況・施設の営業状況は、出発前に各公式サイトでご確認ください。</p>
+  </main>
+</body>
+</html>
