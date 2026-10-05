@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="横浜駅直結の商業施設内にある、ケーキ・パンケーキ・パフェなどが食べられるカフェ・スイーツ店の一覧（予約可否つき）">
+  <title>横浜駅直結カフェ・スイーツ一覧（おやつ）</title>
+  <style>
+    :root { color-scheme: light; --ink:#243247; --muted:#617089; --line:#dbe3ee; --surface:#fff; --canvas:#f3f6fa; --brand:#176b87; --brand-dark:#0d4e65; --shadow:0 12px 30px rgba(24,49,78,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",sans-serif; line-height:1.7; }
+    a { color:var(--brand-dark); }
+    a:focus-visible { outline:3px solid #f4b942; outline-offset:3px; border-radius:4px; }
+    .hero { padding:3.5rem 1.25rem 3rem; color:#fff; background:linear-gradient(135deg,#0d5068,#1b7d87 58%,#77a9a2); }
+    .hero__inner, main { max-width:1080px; margin:0 auto; }
+    .eyebrow { margin:0 0 .4rem; font-size:.82rem; font-weight:700; letter-spacing:.12em; opacity:.86; }
+    h1 { margin:0; font-size:clamp(1.5rem,4vw,2.3rem); line-height:1.3; }
+    .lead { max-width:44rem; margin:1rem 0 0; color:#e4f3f3; font-size:.95rem; }
+    .jump-nav { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; }
+    .jump-nav a { padding:.32rem .65rem; color:#fff; text-decoration:none; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:.84rem; }
+    .jump-nav a:hover { background:rgba(255,255,255,.16); }
+    main { padding:2rem 1.25rem 4rem; }
+    .note { margin:0 0 1.75rem; padding:.9rem 1rem; color:#5d4c25; background:#fff9e9; border-left:4px solid #e4b94e; font-size:.87rem; }
+    .note p { margin:.35rem 0; }
+    .note p:first-child { margin-top:0; }
+    .note p:last-child { margin-bottom:0; }
+    .building { margin:0 0 1.75rem; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .building__head { padding:1.1rem 1.4rem 1rem; background:#edf7f7; border-bottom:1px solid var(--line); }
+    .building__head h2 { margin:0; font-size:1.2rem; }
+    .building__meta { margin:.35rem 0 0; color:var(--muted); font-size:.85rem; }
+    .building__meta a { font-weight:700; }
+    .store-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; padding:1.1rem 1.4rem 1.4rem; }
+    .store-card { display:flex; flex-direction:column; overflow:hidden; background:var(--canvas); border:1px solid var(--line); border-radius:12px; }
+    .store-card__photo { display:block; width:100%; height:220px; object-fit:cover; background:#e7edf3; }
+    .store-card__body { padding:.75rem .9rem .9rem; }
+    .store-card__name { margin:0; font-size:1rem; font-weight:700; line-height:1.4; }
+    .store-card__row { display:flex; flex-wrap:wrap; gap:.4rem .7rem; margin-top:.4rem; font-size:.85rem; }
+    .store-card__floor { color:var(--brand-dark); font-weight:700; }
+    .store-card__genre { color:var(--muted); }
+    .store-card__budget { color:var(--brand-dark); font-weight:700; }
+    .store-card__map { margin-top:.55rem; }
+    .store-card__map a { display:inline-block; text-decoration:none; font-size:.82rem; padding:.3rem .65rem; border:1px solid var(--line); border-radius:6px; background:#fff; }
+    .store-card__map a:hover { background:#edf7f7; }
+    .both-badge { display:inline-block; margin-left:.4rem; padding:.05rem .4rem; color:#0d4e65; background:#dff1f4; border-radius:4px; font-size:.68rem; font-weight:700; vertical-align:.1em; }
+    .footer-note { margin:1.5rem 0 0; color:var(--muted); font-size:.85rem; }
+    .footer-note a { font-weight:700; }
+    .filter-chips { display:flex; flex-wrap:wrap; gap:.45rem; }
+    .filter-chip input { position:absolute; opacity:0; width:1px; height:1px; }
+    .filter-chip span { display:inline-block; padding:.32rem .75rem; color:var(--ink); background:#fff; border:1px solid var(--line); border-radius:999px; font-size:.82rem; cursor:pointer; user-select:none; }
+    .filter-chip input:checked + span { color:#fff; background:var(--brand-dark); border-color:var(--brand-dark); }
+    .filter-chip input:focus-visible + span { outline:3px solid #f4b942; outline-offset:2px; }
+    .rsv { display:inline-block; padding:.05rem .5rem; border-radius:4px; font-size:.75rem; font-weight:700; }
+    .rsv--yes { color:#0b5a2b; background:#dcf3e3; }
+    .rsv--no { color:#5b6577; background:#e8ecf2; }
+    .rsv--unk { color:#7a6a3a; background:#fff3cf; }
+    .rsv-note { flex-basis:100%; color:var(--muted); font-size:.78rem; }
+    @media (max-width:640px) {
+      .hero{padding:2.5rem 1rem 2.2rem;} main{padding:1.25rem .75rem 3rem;}
+      .store-grid { grid-template-columns:1fr; padding:.9rem .9rem 1.1rem; gap:.8rem; }
+      .store-card__photo { height:190px; }
+      }
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero__inner">
+    <p class="eyebrow">YOKOHAMA STATION · SWEETS &amp; CAFE</p>
+    <h1>横浜駅直結カフェ・スイーツ一覧（おやつ）</h1>
+    <p class="lead">横浜駅と直結・連絡通路でつながる施設内のカフェ・スイーツ店のうち、店内で食べられる39店を施設ごとにフロア順で掲載しています。予約できない店も含め、食べログ上の予約可否を各カードに表示しています。</p>
+    <nav class="jump-nav" aria-label="施設へのリンク">
+      <a href="#sogo">そごう横浜店（13）</a>
+      <a href="#takashimaya">横浜高島屋（9）</a>
+      <a href="#joinus">相鉄ジョイナス（1）</a>
+      <a href="#bayquarter">横浜ベイクォーター（4）</a>
+      <a href="#mores">横浜モアーズ（1）</a>
+      <a href="#lumine">ルミネ横浜（5）</a>
+      <a href="#porta">横浜ポルタ（4）</a>
+      <a href="#skybuilding">横浜スカイビル（1）</a>
+      <a href="#sheraton">横浜ベイシェラトン ホテル&amp;タワーズ（1）</a>
+    </nav>
+  </div></header>
+  <main>
+    <div class="note">
+      <p><strong>掲載基準：</strong>食べログの各施設ページの「カフェ」「スイーツ」一覧（2026年10月時点）から、店内席があるカフェ・パーラー・甘味処などに絞りました。テイクアウト専門の洋菓子店・コーヒースタンド・食事中心の店は除いています。</p>
+      <p><strong>予約可否：</strong>食べログ店舗ページの「予約可否」表記をそのまま転記しています（予約可 12／予約不可 25／情報なし 2）。予約可でも時間帯や食事利用のみなどの条件がある店は注記しています。ネット予約とは限らず、電話予約のみの場合もあります。</p>
+      <p>フロアは食べログ掲載の住所から、写真は食べログ掲載の店舗写真です。営業時間・予約可否・価格は変動するため、訪問前に最新情報をご確認ください。</p>
+    </div>
+
+    <section class="building" id="sogo">
+      <div class="building__head">
+        <h2>そごう横浜店</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P000258/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P000258/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14080799.jpg" alt="マーロウ ブラザーズコーヒー そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14080799/" target="_blank" rel="noopener">マーロウ ブラザーズコーヒー そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B2F</span>
+              <span class="store-card__genre">カフェ・プリン</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9E%E3%83%BC%E3%83%AD%E3%82%A6%20%E3%83%96%E3%83%A9%E3%82%B6%E3%83%BC%E3%82%BA%E3%82%B3%E3%83%BC%E3%83%92%E3%83%BC%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14001292.jpg" alt="虎屋菓寮 横浜そごう店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14001292/" target="_blank" rel="noopener">虎屋菓寮 横浜そごう店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B2F</span>
+              <span class="store-card__genre">甘味処・和菓子・かき氷</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%99%8E%E5%B1%8B%E8%8F%93%E5%AF%AE%20%E6%A8%AA%E6%B5%9C%E3%81%9D%E3%81%94%E3%81%86%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14005814.jpg" alt="UCCカフェ メルカード そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14005814/" target="_blank" rel="noopener">UCCカフェ メルカード そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B2F</span>
+              <span class="store-card__genre">カフェ・洋菓子</span>
+              <span class="rsv rsv--unk">予約情報なし</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=UCC%E3%82%AB%E3%83%95%E3%82%A7%20%E3%83%A1%E3%83%AB%E3%82%AB%E3%83%BC%E3%83%89%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14067213.jpg" alt="タカナシミルクパーラー" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14067213/" target="_blank" rel="noopener">タカナシミルクパーラー</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B2F</span>
+              <span class="store-card__genre">ソフトクリーム</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%BF%E3%82%AB%E3%83%8A%E3%82%B7%E3%83%9F%E3%83%AB%E3%82%AF%E3%83%91%E3%83%BC%E3%83%A9%E3%83%BC%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14101308.jpg" alt="萬珍樓茶房" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14101308/" target="_blank" rel="noopener">萬珍樓茶房</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B2F</span>
+              <span class="store-card__genre">カフェ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%90%AC%E7%8F%8D%E6%A8%93%E8%8C%B6%E6%88%BF%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14003275.jpg" alt="カフェ・ドルチェ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003275/" target="_blank" rel="noopener">カフェ・ドルチェ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">カフェ・ケーキ</span>
+              <span class="rsv rsv--unk">予約情報なし</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AB%E3%83%95%E3%82%A7%E3%83%BB%E3%83%89%E3%83%AB%E3%83%81%E3%82%A7%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14003754.jpg" alt="駿河屋" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003754/" target="_blank" rel="noopener">駿河屋</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">甘味処・喫茶店・かき氷</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%A7%BF%E6%B2%B3%E5%B1%8B%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14003753.jpg" alt="カフェ・デルフィ 横浜そごう店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003753/" target="_blank" rel="noopener">カフェ・デルフィ 横浜そごう店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">カフェ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AB%E3%83%95%E3%82%A7%E3%83%BB%E3%83%87%E3%83%AB%E3%83%95%E3%82%A3%20%E6%A8%AA%E6%B5%9C%E3%81%9D%E3%81%94%E3%81%86%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14001296.jpg" alt="カフェメディオ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14001296/" target="_blank" rel="noopener">カフェメディオ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">7F</span>
+              <span class="store-card__genre">カフェ・洋食・ケーキ</span>
+              <span class="rsv rsv--yes">予約可</span><span class="rsv-note">平日のみ応相談（土日祝不可）</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AB%E3%83%95%E3%82%A7%E3%83%A1%E3%83%87%E3%82%A3%E3%82%AA%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14062881.jpg" alt="椿屋カフェ そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14062881/" target="_blank" rel="noopener">椿屋カフェ そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">9F</span>
+              <span class="store-card__genre">カフェ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A4%BF%E5%B1%8B%E3%82%AB%E3%83%95%E3%82%A7%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14054164.jpg" alt="サロン ウフ エ モア そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14054164/" target="_blank" rel="noopener">サロン ウフ エ モア そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">パンケーキ・オムライス</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%B5%E3%83%AD%E3%83%B3%20%E3%82%A6%E3%83%95%20%E3%82%A8%20%E3%83%A2%E3%82%A2%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14003082.jpg" alt="京はやしや そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003082/" target="_blank" rel="noopener">京はやしや そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">カフェ・甘味処</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%BA%AC%E3%81%AF%E3%82%84%E3%81%97%E3%82%84%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sogo-14075550.jpg" alt="イー・エー・グラン そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14075550/" target="_blank" rel="noopener">イー・エー・グラン そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">カフェ・喫茶店</span>
+              <span class="rsv rsv--yes">予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A4%E3%83%BC%E3%83%BB%E3%82%A8%E3%83%BC%E3%83%BB%E3%82%B0%E3%83%A9%E3%83%B3%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="takashimaya">
+      <div class="building__head">
+        <h2>横浜高島屋</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P008551/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P008551/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14082932.jpg" alt="ラデュレ 横浜 高島屋店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14082932/" target="_blank" rel="noopener">ラデュレ 横浜 高島屋店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">マカロン・ケーキ・スイーツ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%87%E3%83%A5%E3%83%AC%20%E6%A8%AA%E6%B5%9C%20%E9%AB%98%E5%B3%B6%E5%B1%8B%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14083088.jpg" alt="千疋屋総本店 横浜高島屋店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14083088/" target="_blank" rel="noopener">千疋屋総本店 横浜高島屋店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">ジューススタンド・ケーキ・洋菓子</span>
+              <span class="rsv rsv--yes">予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%83%E7%96%8B%E5%B1%8B%E7%B7%8F%E6%9C%AC%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14095215.jpg" alt="伊藤園 点 横浜髙島屋店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14095215/" target="_blank" rel="noopener">伊藤園 点 横浜髙島屋店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">かき氷</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%BC%8A%E8%97%A4%E5%9C%92%20%E7%82%B9%20%E6%A8%AA%E6%B5%9C%E9%AB%99%E5%B3%B6%E5%B1%8B%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14051103.jpg" alt="タカノフルーツパーラー 横浜高島屋店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14051103/" target="_blank" rel="noopener">タカノフルーツパーラー 横浜高島屋店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">カフェ・フルーツパーラー</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%BF%E3%82%AB%E3%83%8E%E3%83%95%E3%83%AB%E3%83%BC%E3%83%84%E3%83%91%E3%83%BC%E3%83%A9%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14050609.jpg" alt="ウエスト ベイカフェ ヨコハマ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14050609/" target="_blank" rel="noopener">ウエスト ベイカフェ ヨコハマ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">カフェ・喫茶店・ケーキ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A6%E3%82%A8%E3%82%B9%E3%83%88%20%E3%83%99%E3%82%A4%E3%82%AB%E3%83%95%E3%82%A7%20%E3%83%A8%E3%82%B3%E3%83%8F%E3%83%9E%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14085792.jpg" alt="珈琲専門店 カフェ 横濱壹番館" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14085792/" target="_blank" rel="noopener">珈琲専門店 カフェ 横濱壹番館</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">カフェ・ケーキ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%8F%88%E7%90%B2%E5%B0%82%E9%96%80%E5%BA%97%20%E3%82%AB%E3%83%95%E3%82%A7%20%E6%A8%AA%E6%BF%B1%E5%A3%B9%E7%95%AA%E9%A4%A8%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14048886.jpg" alt="イノダコーヒ 横浜高島屋支店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14048886/" target="_blank" rel="noopener">イノダコーヒ 横浜高島屋支店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">喫茶店・カフェ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A4%E3%83%8E%E3%83%80%E3%82%B3%E3%83%BC%E3%83%92%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%E6%94%AF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14002985.jpg" alt="資生堂パーラー 横浜高島屋店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14002985/" target="_blank" rel="noopener">資生堂パーラー 横浜高島屋店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">洋食・喫茶店・サンドイッチ</span>
+              <span class="rsv rsv--yes">予約可</span><span class="rsv-note">17:30〜のディナータイムの食事利用のみ予約可（席指定不可）</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%B3%87%E7%94%9F%E5%A0%82%E3%83%91%E3%83%BC%E3%83%A9%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/takashimaya-14073713.jpg" alt="清月堂 横浜高島屋店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14073713/" target="_blank" rel="noopener">清月堂 横浜高島屋店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">7F</span>
+              <span class="store-card__genre">甘味処</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%B8%85%E6%9C%88%E5%A0%82%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="joinus">
+      <div class="building__head">
+        <h2>相鉄ジョイナス</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P002361/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P002361/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/joinus-14047191.jpg" alt="ナナズ グリーン ティー 相鉄ジョイナス店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14047191/" target="_blank" rel="noopener">ナナズ グリーン ティー 相鉄ジョイナス店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">カフェ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%8A%E3%83%8A%E3%82%BA%20%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%20%E3%83%86%E3%82%A3%E3%83%BC%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%E5%BA%97%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="bayquarter">
+      <div class="building__head">
+        <h2>横浜ベイクォーター</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P003844/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P003844/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/bayquarter-14052981.jpg" alt="Butter 横浜ベイクォーター" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14052981/" target="_blank" rel="noopener">Butter 横浜ベイクォーター</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">ダイニングバー・パンケーキ・パスタ</span>
+              <span class="rsv rsv--yes">予約可</span><span class="rsv-note">土日祝は18時以降のみ予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Butter%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/bayquarter-14057889.jpg" alt="リンツ ショコラ ブティック＆カフェ 横浜ベイクォーター店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14057889/" target="_blank" rel="noopener">リンツ ショコラ ブティック＆カフェ 横浜ベイクォーター店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">カフェ・チョコレート・スイーツ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%AA%E3%83%B3%E3%83%84%20%E3%82%B7%E3%83%A7%E3%82%B3%E3%83%A9%20%E3%83%96%E3%83%86%E3%82%A3%E3%83%83%E3%82%AF%EF%BC%86%E3%82%AB%E3%83%95%E3%82%A7%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/bayquarter-14004615.jpg" alt="アロハテーブル 横浜ベイクォーター" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140212/14004615/" target="_blank" rel="noopener">アロハテーブル 横浜ベイクォーター</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">カフェ・パンケーキ・ダイニングバー</span>
+              <span class="rsv rsv--yes">予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%AD%E3%83%8F%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/bayquarter-14067066.jpg" alt="tables cook&amp;LIVING HOUSE" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14067066/" target="_blank" rel="noopener">tables cook&amp;LIVING HOUSE</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">カフェ・パンケーキ・イタリアン</span>
+              <span class="rsv rsv--yes">予約可</span><span class="rsv-note">開店〜12:00のみ予約可（カフェタイムは不可）</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=tables%20cook%26LIVING%20HOUSE%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="mores">
+      <div class="building__head">
+        <h2>横浜モアーズ</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P003934/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P003934/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/mores-14051691.jpg" alt="MARFA CAFE" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14051691/" target="_blank" rel="noopener">MARFA CAFE</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">カフェ・アメリカ料理・パンケーキ</span>
+              <span class="rsv rsv--yes">予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=MARFA%20CAFE%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="lumine">
+      <div class="building__head">
+        <h2>ルミネ横浜</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P000280/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P000280/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/lumine-14035511.jpg" alt="HARBS ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14035511/" target="_blank" rel="noopener">HARBS ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">カフェ・ケーキ・パスタ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=HARBS%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/lumine-14066586.jpg" alt="24/7 coffee&amp;roaster 横浜" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14066586/" target="_blank" rel="noopener">24/7 coffee&amp;roaster 横浜</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">カフェ・ケーキ・コーヒースタンド</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=24/7%20coffee%26roaster%20%E6%A8%AA%E6%B5%9C%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/lumine-14069274.jpg" alt="アフタヌーンティー ラブアンドテーブル 横浜ルミネ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14069274/" target="_blank" rel="noopener">アフタヌーンティー ラブアンドテーブル 横浜ルミネ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">5F</span>
+              <span class="store-card__genre">カフェ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%95%E3%82%BF%E3%83%8C%E3%83%BC%E3%83%B3%E3%83%86%E3%82%A3%E3%83%BC%20%E3%83%A9%E3%83%96%E3%82%A2%E3%83%B3%E3%83%89%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E3%83%AB%E3%83%9F%E3%83%8D%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/lumine-14097307.jpg" alt="The French Toast Factory ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14097307/" target="_blank" rel="noopener">The French Toast Factory ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">カフェ・パンケーキ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=The%20French%20Toast%20Factory%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/lumine-14006551.jpg" alt="ラ・メゾン アンソレイユターブル ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14006551/" target="_blank" rel="noopener">ラ・メゾン アンソレイユターブル ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">7F</span>
+              <span class="store-card__genre">ケーキ・カフェ・ヨーロッパ料理</span>
+              <span class="rsv rsv--yes">予約可</span><span class="rsv-note">11:00のみ予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%BB%E3%83%A1%E3%82%BE%E3%83%B3%20%E3%82%A2%E3%83%B3%E3%82%BD%E3%83%AC%E3%82%A4%E3%83%A6%E3%82%BF%E3%83%BC%E3%83%96%E3%83%AB%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="porta">
+      <div class="building__head">
+        <h2>横浜ポルタ</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P003437/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P003437/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/porta-14097020.jpg" alt="ミスタードーナツ 横浜ポルタショップ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14097020/" target="_blank" rel="noopener">ミスタードーナツ 横浜ポルタショップ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">ドーナツ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9F%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%89%E3%83%BC%E3%83%8A%E3%83%84%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E3%82%B7%E3%83%A7%E3%83%83%E3%83%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/porta-14064556.jpg" alt="春水堂 横浜ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14064556/" target="_blank" rel="noopener">春水堂 横浜ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">カフェ・スイーツ・台湾料理</span>
+              <span class="rsv rsv--yes">予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%98%A5%E6%B0%B4%E5%A0%82%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/porta-14090140.jpg" alt="fruits peaks 横浜ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14090140/" target="_blank" rel="noopener">fruits peaks 横浜ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">ケーキ・カフェ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=fruits%20peaks%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/porta-14085429.jpg" alt="ゴンチャ 横浜ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14085429/" target="_blank" rel="noopener">ゴンチャ 横浜ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">ティースタンド・タピオカ</span>
+              <span class="rsv rsv--yes">予約可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%B4%E3%83%B3%E3%83%81%E3%83%A3%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="skybuilding">
+      <div class="building__head">
+        <h2>横浜スカイビル</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P020861/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P020861/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/skybuilding-14007529.jpg" alt="リトル セーマン" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14007529/" target="_blank" rel="noopener">リトル セーマン</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">カフェ・クレープ・ガレット・サンドイッチ</span>
+              <span class="rsv rsv--no">予約不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%AA%E3%83%88%E3%83%AB%20%E3%82%BB%E3%83%BC%E3%83%9E%E3%83%B3%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="sheraton">
+      <div class="building__head">
+        <h2>横浜ベイシェラトン ホテル&amp;タワーズ</h2>
+        <p class="building__meta"><a href="https://tabelog.com/kanagawa/P026141/premiseLst/cafe/?SrtT=trend" target="_blank" rel="noopener">食べログでカフェ一覧を見る</a> ／ <a href="https://tabelog.com/kanagawa/P026141/premiseLst/sweets/?SrtT=trend" target="_blank" rel="noopener">スイーツ一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-sweets-photos/sheraton-14005194.jpg" alt="ラウンジ シーウインド" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14005194/" target="_blank" rel="noopener">ラウンジ シーウインド</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">カフェ・ビュッフェ</span>
+              <span class="rsv rsv--yes">予約可</span><span class="rsv-note">喫茶利用の予約は不可</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%82%A6%E3%83%B3%E3%82%B8%20%E3%82%B7%E3%83%BC%E3%82%A6%E3%82%A4%E3%83%B3%E3%83%89%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%B7%E3%82%A7%E3%83%A9%E3%83%88%E3%83%B3%20%E3%83%9B%E3%83%86%E3%83%AB%26%E3%82%BF%E3%83%AF%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,1524 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="横浜駅直結の商業施設内にあり、Hot Pepperまたは食べログでディナーのネット予約ができるレストラン一覧">
+  <title>横浜駅直結レストラン一覧（ディナー ネット予約可）</title>
+  <style>
+    :root { color-scheme: light; --ink:#243247; --muted:#617089; --line:#dbe3ee; --surface:#fff; --canvas:#f3f6fa; --brand:#176b87; --brand-dark:#0d4e65; --shadow:0 12px 30px rgba(24,49,78,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",sans-serif; line-height:1.7; }
+    a { color:var(--brand-dark); }
+    a:focus-visible { outline:3px solid #f4b942; outline-offset:3px; border-radius:4px; }
+    .hero { padding:3.5rem 1.25rem 3rem; color:#fff; background:linear-gradient(135deg,#0d5068,#1b7d87 58%,#77a9a2); }
+    .hero__inner, main { max-width:1080px; margin:0 auto; }
+    .eyebrow { margin:0 0 .4rem; font-size:.82rem; font-weight:700; letter-spacing:.12em; opacity:.86; }
+    h1 { margin:0; font-size:clamp(1.5rem,4vw,2.3rem); line-height:1.3; }
+    .lead { max-width:44rem; margin:1rem 0 0; color:#e4f3f3; font-size:.95rem; }
+    .jump-nav { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; }
+    .jump-nav a { padding:.32rem .65rem; color:#fff; text-decoration:none; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:.84rem; }
+    .jump-nav a:hover { background:rgba(255,255,255,.16); }
+    main { padding:2rem 1.25rem 4rem; }
+    .note { margin:0 0 1.75rem; padding:.9rem 1rem; color:#5d4c25; background:#fff9e9; border-left:4px solid #e4b94e; font-size:.87rem; }
+    .note p { margin:.35rem 0; }
+    .note p:first-child { margin-top:0; }
+    .note p:last-child { margin-bottom:0; }
+    .building { margin:0 0 1.75rem; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .building__head { padding:1.1rem 1.4rem 1rem; background:#edf7f7; border-bottom:1px solid var(--line); }
+    .building__head h2 { margin:0; font-size:1.2rem; }
+    .building__meta { margin:.35rem 0 0; color:var(--muted); font-size:.85rem; }
+    .building__meta a { font-weight:700; }
+    .store-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; padding:1.1rem 1.4rem 1.4rem; }
+    .store-card { display:flex; flex-direction:column; overflow:hidden; background:var(--canvas); border:1px solid var(--line); border-radius:12px; }
+    .store-card__photo { display:block; width:100%; height:220px; object-fit:cover; background:#e7edf3; }
+    .store-card__body { padding:.75rem .9rem .9rem; }
+    .store-card__name { margin:0; font-size:1rem; font-weight:700; line-height:1.4; }
+    .store-card__row { display:flex; flex-wrap:wrap; gap:.4rem .7rem; margin-top:.4rem; font-size:.85rem; }
+    .store-card__floor { color:var(--brand-dark); font-weight:700; }
+    .store-card__genre { color:var(--muted); }
+    .store-card__budget { color:var(--brand-dark); font-weight:700; }
+    .store-card__map { margin-top:.55rem; }
+    .store-card__map a { display:inline-block; text-decoration:none; font-size:.82rem; padding:.3rem .65rem; border:1px solid var(--line); border-radius:6px; background:#fff; }
+    .store-card__map a:hover { background:#edf7f7; }
+    .both-badge { display:inline-block; margin-left:.4rem; padding:.05rem .4rem; color:#0d4e65; background:#dff1f4; border-radius:4px; font-size:.68rem; font-weight:700; vertical-align:.1em; }
+    .footer-note { margin:1.5rem 0 0; color:var(--muted); font-size:.85rem; }
+    .footer-note a { font-weight:700; }
+    .filter-bar { margin:0 0 1.75rem; padding:1rem 1.4rem 1.2rem; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .filter-bar__group { margin:0 0 .9rem; border:0; padding:0; }
+    .filter-bar__group:last-of-type { margin-bottom:0; }
+    .filter-bar__group legend { padding:0 0 .4rem; font-size:.8rem; color:var(--muted); font-weight:700; }
+    .filter-chips { display:flex; flex-wrap:wrap; gap:.45rem; }
+    .filter-chip input { position:absolute; opacity:0; width:1px; height:1px; }
+    .filter-chip span { display:inline-block; padding:.32rem .75rem; color:var(--ink); background:#fff; border:1px solid var(--line); border-radius:999px; font-size:.82rem; cursor:pointer; user-select:none; }
+    .filter-chip input:checked + span { color:#fff; background:var(--brand-dark); border-color:var(--brand-dark); }
+    .filter-chip input:focus-visible + span { outline:3px solid #f4b942; outline-offset:2px; }
+    .filter-bar__footer { display:flex; align-items:center; gap:.9rem; margin-top:1rem; }
+    .filter-bar__reset { padding:.4rem .8rem; color:var(--brand-dark); background:#edf7f7; border:1px solid var(--line); border-radius:8px; font-size:.85rem; cursor:pointer; }
+    .filter-bar__reset:hover { background:#dff1f4; }
+    .filter-bar__count { margin-left:auto; font-size:.85rem; color:var(--brand-dark); font-weight:700; white-space:nowrap; }
+    @media (max-width:640px) {
+      .hero{padding:2.5rem 1rem 2.2rem;} main{padding:1.25rem .75rem 3rem;}
+      .store-grid { grid-template-columns:1fr; padding:.9rem .9rem 1.1rem; gap:.8rem; }
+      .store-card__photo { height:190px; }
+      .filter-bar { padding:.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero__inner">
+    <p class="eyebrow">YOKOHAMA STATION · DIRECTLY CONNECTED</p>
+    <h1>横浜駅直結レストラン一覧（ディナー ネット予約可）</h1>
+    <p class="lead">横浜駅と直結・連絡通路（屋根付きデッキ・地下街を含む）でつながる12施設内のレストランのうち、食べログの「ネット予約できるお店」フィルターで実際にヒットした店・個別にネット予約可を確認できた店を、施設ごとにフロア順で全件掲載しています（フードコート・惣菜店・カフェ単体などは除く）。店名は食べログの店舗ページ（写真あり）にリンクしています。</p>
+    <nav class="jump-nav" aria-label="施設へのリンク">
+      <a href="#sogo">そごう横浜店（14）</a>
+      <a href="#takashimaya">横浜高島屋（3）</a>
+      <a href="#joinus">相鉄ジョイナス（7）</a>
+      <a href="#bayquarter">横浜ベイクォーター（12）</a>
+      <a href="#mores">横浜モアーズ（6）</a>
+      <a href="#lumine">ルミネ横浜（13）</a>
+      <a href="#newoman">ニュウマン横浜（9）</a>
+      <a href="#porta">横浜ポルタ（5）</a>
+      <a href="#skybuilding">横浜スカイビル（9）</a>
+      <a href="#yodobashi">ヨドバシ横浜（3）</a>
+      <a href="#sheraton">横浜ベイシェラトン（5）</a>
+      <a href="#cialannex">CIAL横浜ANNEX（4）</a>
+      <a href="#ekinia">エキニア横浜（6）</a>
+      <a href="#yokohamafront">ザ・ヨコハマフロント（1）</a>
+    </nav>
+  </div></header>
+  <main>
+    <section class="filter-bar" aria-label="絞り込み">
+      <fieldset class="filter-bar__group">
+        <legend>ジャンル（複数選択可）</legend>
+        <div class="filter-chips" id="filter-genre">
+          <label class="filter-chip"><input type="checkbox" value="japanese"><span>日本料理・懐石</span></label>
+          <label class="filter-chip"><input type="checkbox" value="seafood"><span>海鮮・寿司・うなぎ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="yakiniku"><span>焼肉・韓国料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="shabu"><span>すき焼き・しゃぶしゃぶ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="chinese"><span>中華料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="izakaya"><span>居酒屋</span></label>
+          <label class="filter-chip"><input type="checkbox" value="soba"><span>そば・うどん・天ぷら</span></label>
+          <label class="filter-chip"><input type="checkbox" value="italian"><span>イタリアン・パスタ・ピザ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="french"><span>フレンチ・ビストロ・洋食</span></label>
+          <label class="filter-chip"><input type="checkbox" value="steak"><span>ステーキ・鉄板焼き</span></label>
+          <label class="filter-chip"><input type="checkbox" value="cafe"><span>カフェ・スイーツ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="beer"><span>ビアバー・ビアホール</span></label>
+          <label class="filter-chip"><input type="checkbox" value="ethnic"><span>アジア・エスニック料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="okinawa"><span>沖縄・ハワイアン</span></label>
+          <label class="filter-chip"><input type="checkbox" value="other"><span>その他・郷土料理</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="filter-bar__group">
+        <legend>予算・ディナー（複数選択可）</legend>
+        <div class="filter-chips" id="filter-budget">
+          <label class="filter-chip"><input type="checkbox" value="lt3000"><span>〜¥2,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="3000-4999"><span>¥3,000〜¥4,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="5000-7999"><span>¥5,000〜¥7,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="8000-14999"><span>¥8,000〜¥14,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="gte15000"><span>¥15,000〜</span></label>
+        </div>
+      </fieldset>
+      <div class="filter-bar__footer">
+        <button type="button" class="filter-bar__reset" id="filter-reset">条件をリセット</button>
+        <p class="filter-bar__count" id="filter-count" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <div class="note">
+      <p><strong>掲載基準：</strong>食べログの各施設ページで「ネット予約できるお店」フィルター（cond11）を適用し、実際に表示された店舗を全件そのまま掲載しています（2026年9月時点）。Hot Pepperと食べログの<strong>両方</strong>でネット予約可能なことを個別確認できた店には<span class="both-badge">両方確認済み</span>のバッジを付けています。バッジが無い店は食べログ側のネット予約のみ確認済みで、Hot Pepper側は未確認です（無いという意味ではありません）。</p>
+      <p>フロアは食べログ掲載情報から可能な範囲で調べたもので、不明な店舗は「—」としています（各施設内でフロアが分かる店舗を上から順に並べ、不明な店舗は末尾にまとめています）。写真は食べログ掲載の店舗写真です。</p>
+      <p>営業時間・予約可否・価格は変動するため、予約前に必ず最新情報をご確認ください。</p>
+    </div>
+
+    <section class="building" id="sogo">
+      <div class="building__head">
+        <h2>そごう横浜店（10F ダイニングパーク横浜ほか）</h2>
+        <p class="building__meta">横浜駅東口直結／<a href="https://tabelog.com/kanagawa/P000258/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/kyokaiseki-minokichi.jpg" alt="京懐石 美濃吉 そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003088/" target="_blank" rel="noopener">京懐石 美濃吉 そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">日本料理</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%BA%AC%E6%87%90%E7%9F%B3%20%E7%BE%8E%E6%BF%83%E5%90%89%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/keiteiro.jpg" alt="京鼎樓 そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14009182/" target="_blank" rel="noopener">京鼎樓 そごう横浜店</a><span class="both-badge">両方確認済み</span></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">小籠包・中華料理</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%BA%AC%E9%BC%8E%E6%A8%93%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/okura-tougen.jpg" alt="ホテルオークラ レストラン横浜 中国料理 桃源" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003077/" target="_blank" rel="noopener">ホテルオークラ レストラン横浜 中国料理 桃源</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">中華料理</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9B%E3%83%86%E3%83%AB%E3%82%AA%E3%83%BC%E3%82%AF%E3%83%A9%20%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%E6%A8%AA%E6%B5%9C%20%E4%B8%AD%E5%9B%BD%E6%96%99%E7%90%86%20%E6%A1%83%E6%BA%90%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/bistro-ishikawatei.jpg" alt="Bistro Ishikawatei そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14085612/" target="_blank" rel="noopener">Bistro Ishikawatei そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">ビストロ</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Bistro%20Ishikawatei%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/senbou.jpg" alt="千房 そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003090/" target="_blank" rel="noopener">千房 そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">お好み焼き・居酒屋</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%83%E6%88%BF%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/yamatoya.jpg" alt="大和屋 横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003075/" target="_blank" rel="noopener">大和屋 横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">日本料理・海鮮</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E5%92%8C%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/gumbo-oysterbar.jpg" alt="ガンボ＆オイスターバー 横浜そごう店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003085/" target="_blank" rel="noopener">ガンボ＆オイスターバー 横浜そごう店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">シーフード・オイスターバー</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AC%E3%83%B3%E3%83%9C%EF%BC%86%E3%82%AA%E3%82%A4%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%90%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%81%9D%E3%81%94%E3%81%86%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/niki-tei.jpg" alt="フレンチレストラン にき亭 そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003081/" target="_blank" rel="noopener">フレンチレストラン にき亭 そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">フレンチ・ステーキ</span>
+              <span class="store-card__budget">¥6,000〜¥7,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%95%E3%83%AC%E3%83%B3%E3%83%81%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%20%E3%81%AB%E3%81%8D%E4%BA%AD%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/ginza-aster.jpg" alt="銀座アスター ベルシーヌ横浜" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003076/" target="_blank" rel="noopener">銀座アスター ベルシーヌ横浜</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">中華料理・四川料理</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%8A%80%E5%BA%A7%E3%82%A2%E3%82%B9%E3%82%BF%E3%83%BC%20%E3%83%99%E3%83%AB%E3%82%B7%E3%83%BC%E3%83%8C%E6%A8%AA%E6%B5%9C%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/gyubee-souan.jpg" alt="牛兵衛 草庵 そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14058924/" target="_blank" rel="noopener">牛兵衛 草庵 そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">焼肉・ホルモン</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%89%9B%E5%85%B5%E8%A1%9B%20%E8%8D%89%E5%BA%B5%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/il-pinolo.jpg" alt="IL PINOLO SKY TERRACE 横浜" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003084/" target="_blank" rel="noopener">IL PINOLO SKY TERRACE 横浜</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">イタリアン・パスタ</span>
+              <span class="store-card__budget">¥6,000〜¥7,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=IL%20PINOLO%20SKY%20TERRACE%20%E6%A8%AA%E6%B5%9C%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/alporto-classico.jpg" alt="アルポルト・クラシコ そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14035537/" target="_blank" rel="noopener">アルポルト・クラシコ そごう横浜店</a><span class="both-badge">両方確認済み</span></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">イタリアン・パスタ</span>
+              <span class="store-card__budget">¥6,000〜¥7,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%AB%E3%83%9D%E3%83%AB%E3%83%88%E3%83%BB%E3%82%AF%E3%83%A9%E3%82%B7%E3%82%B3%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/kabe-no-ana.jpg" alt="壁の穴 そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14054256/" target="_blank" rel="noopener">壁の穴 そごう横浜店</a><span class="both-badge">両方確認済み</span></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">パスタ・イタリアン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%A3%81%E3%81%AE%E7%A9%B4%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sogo/araiya.jpg" alt="荒井屋 そごう横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14083611/" target="_blank" rel="noopener">荒井屋 そごう横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">すき焼き・しゃぶしゃぶ</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%8D%92%E4%BA%95%E5%B1%8B%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%81%9D%E3%81%94%E3%81%86%E6%A8%AA%E6%B5%9C%E5%BA%97%EF%BC%8810F%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%83%91%E3%83%BC%E3%82%AF%E6%A8%AA%E6%B5%9C%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="takashimaya">
+      <div class="building__head">
+        <h2>横浜高島屋（8F ローズダイニングほか）</h2>
+        <p class="building__meta">横浜駅西口直結／<a href="https://tabelog.com/kanagawa/P008551/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/takashimaya/le-grand.jpg" alt="ル グラン" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14029845/" target="_blank" rel="noopener">ル グラン</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">8F</span>
+              <span class="store-card__genre">洋食・ヨーロッパ料理</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%AB%20%E3%82%B0%E3%83%A9%E3%83%B3%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%EF%BC%888F%20%E3%83%AD%E3%83%BC%E3%82%BA%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/takashimaya/saikabou.jpg" alt="妻家房 横浜高島屋店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14030881/" target="_blank" rel="noopener">妻家房 横浜高島屋店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">8F</span>
+              <span class="store-card__genre">韓国料理・冷麺</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%A6%BB%E5%AE%B6%E6%88%BF%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%EF%BC%888F%20%E3%83%AD%E3%83%BC%E3%82%BA%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/takashimaya/nadaman-hinkan.jpg" alt="なだ万賓館 横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14029832/" target="_blank" rel="noopener">なだ万賓館 横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">8F</span>
+              <span class="store-card__genre">日本料理</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%AA%E3%81%A0%E4%B8%87%E8%B3%93%E9%A4%A8%20%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E9%AB%98%E5%B3%B6%E5%B1%8B%EF%BC%888F%20%E3%83%AD%E3%83%BC%E3%82%BA%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="joinus">
+      <div class="building__head">
+        <h2>相鉄ジョイナス（地下街）</h2>
+        <p class="building__meta">横浜駅西口直結／<a href="https://tabelog.com/kanagawa/P002361/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/joinus/okamadomeshi-torafuku.jpg" alt="大かまど飯 寅福 横浜ジョイナス店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14043073/" target="_blank" rel="noopener">大かまど飯 寅福 横浜ジョイナス店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B2F</span>
+              <span class="store-card__genre">釜飯・居酒屋</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E3%81%8B%E3%81%BE%E3%81%A9%E9%A3%AF%20%E5%AF%85%E7%A6%8F%20%E6%A8%AA%E6%B5%9C%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%E5%BA%97%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%EF%BC%88%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/joinus/beerhall-lion.jpg" alt="ビヤホールライオン 相鉄店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14001099/" target="_blank" rel="noopener">ビヤホールライオン 相鉄店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">ビアホール・居酒屋</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%93%E3%83%A4%E3%83%9B%E3%83%BC%E3%83%AB%E3%83%A9%E3%82%A4%E3%82%AA%E3%83%B3%20%E7%9B%B8%E9%89%84%E5%BA%97%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%EF%BC%88%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/joinus/tokyo-kitahama.jpg" alt="東京北浜 横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14007391/" target="_blank" rel="noopener">東京北浜 横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">海鮮・居酒屋</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E5%8C%97%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%EF%BC%88%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/joinus/sobatoten-ishiraku.jpg" alt="そばと天ぷら 石楽 ジョイナス横浜" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14061939/" target="_blank" rel="noopener">そばと天ぷら 石楽 ジョイナス横浜</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">そば・天ぷら・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%9D%E3%81%B0%E3%81%A8%E5%A4%A9%E3%81%B7%E3%82%89%20%E7%9F%B3%E6%A5%BD%20%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%E6%A8%AA%E6%B5%9C%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%EF%BC%88%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/joinus/churaya.jpg" alt="ちゅら屋 相鉄ジョイナス店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14012546/" target="_blank" rel="noopener">ちゅら屋 相鉄ジョイナス店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">沖縄料理・居酒屋</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%A1%E3%82%85%E3%82%89%E5%B1%8B%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%E5%BA%97%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%EF%BC%88%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/joinus/osteria-uvarara.jpg" alt="Osteria UVA RARA 横浜" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14000403/" target="_blank" rel="noopener">Osteria UVA RARA 横浜</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">イタリアン</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Osteria%20UVA%20RARA%20%E6%A8%AA%E6%B5%9C%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%EF%BC%88%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/joinus/washoku-sakaen.jpg" alt="和食・酒 えん 横浜ジョイナス店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14002111/" target="_blank" rel="noopener">和食・酒 えん 横浜ジョイナス店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">日本料理・居酒屋</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%92%8C%E9%A3%9F%E3%83%BB%E9%85%92%20%E3%81%88%E3%82%93%20%E6%A8%AA%E6%B5%9C%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%E5%BA%97%20%E7%9B%B8%E9%89%84%E3%82%B8%E3%83%A7%E3%82%A4%E3%83%8A%E3%82%B9%EF%BC%88%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="bayquarter">
+      <div class="building__head">
+        <h2>横浜ベイクォーター</h2>
+        <p class="building__meta">きた東口から連絡通路（ベイクォーターウォーク）で直結／<a href="https://tabelog.com/kanagawa/P003844/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/babel-bayside.jpg" alt="バベル ベイサイド キッチン" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140212/14050209/" target="_blank" rel="noopener">バベル ベイサイド キッチン</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">ビアバー・ビアホール</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%90%E3%83%99%E3%83%AB%20%E3%83%99%E3%82%A4%E3%82%B5%E3%82%A4%E3%83%89%20%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/le-bar-lavin.jpg" alt="ル バー ラ ヴァン サンカンドゥ アザブ トウキョウ 横浜ベイクォーター店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14057992/" target="_blank" rel="noopener">ル バー ラ ヴァン サンカンドゥ アザブ トウキョウ 横浜ベイクォーター店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">イタリアン・ワインバー</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%AB%20%E3%83%90%E3%83%BC%20%E3%83%A9%20%E3%83%B4%E3%82%A1%E3%83%B3%20%E3%82%B5%E3%83%B3%E3%82%AB%E3%83%B3%E3%83%89%E3%82%A5%20%E3%82%A2%E3%82%B6%E3%83%96%20%E3%83%88%E3%82%A6%E3%82%AD%E3%83%A7%E3%82%A6%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/pizzeria-mardenapoli.jpg" alt="PIZZERIA MAR-DE NAPOLI 横浜ベイクォーター店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14088884/" target="_blank" rel="noopener">PIZZERIA MAR-DE NAPOLI 横浜ベイクォーター店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">ピザ・パスタ・イタリアン</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=PIZZERIA%20MAR-DE%20NAPOLI%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/tables-cook-living.jpg" alt="tables cook&LIVING HOUSE" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14067066/" target="_blank" rel="noopener">tables cook&LIVING HOUSE</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">カフェ・パンケーキ・イタリアン</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=tables%20cook%26LIVING%20HOUSE%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/kinkauka.jpg" alt="キンカウーカ グリル&オイスターバー" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14004594/" target="_blank" rel="noopener">キンカウーカ グリル&オイスターバー</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">5F</span>
+              <span class="store-card__genre">牡蠣・シーフード</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AD%E3%83%B3%E3%82%AB%E3%82%A6%E3%83%BC%E3%82%AB%20%E3%82%B0%E3%83%AA%E3%83%AB%26%E3%82%AA%E3%82%A4%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%90%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/chutney.jpg" alt="CHUTNEY Asian Ethnic Kitchen" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14074325/" target="_blank" rel="noopener">CHUTNEY Asian Ethnic Kitchen</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">アジア・エスニック</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=CHUTNEY%20Asian%20Ethnic%20Kitchen%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/kollabo.jpg" alt="焼肉・韓国料理 KollaBo 横浜ベイクォーター店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14074106/" target="_blank" rel="noopener">焼肉・韓国料理 KollaBo 横浜ベイクォーター店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">焼肉・韓国料理</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E3%83%BB%E9%9F%93%E5%9B%BD%E6%96%99%E7%90%86%20KollaBo%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/alohatable.jpg" alt="アロハテーブル 横浜ベイクォーター" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140212/14004615/" target="_blank" rel="noopener">アロハテーブル 横浜ベイクォーター</a><span class="both-badge">両方確認済み</span></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ハワイアン・ダイニングバー</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%AD%E3%83%8F%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/unagi-kikukawa.jpg" alt="うなぎ四代目菊川 横浜ベイクォーター店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14084838/" target="_blank" rel="noopener">うなぎ四代目菊川 横浜ベイクォーター店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">うなぎ</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%86%E3%81%AA%E3%81%8E%E5%9B%9B%E4%BB%A3%E7%9B%AE%E8%8F%8A%E5%B7%9D%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/meiran.jpg" alt="梅蘭 横浜ベイクォーター店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14074993/" target="_blank" rel="noopener">梅蘭 横浜ベイクォーター店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">中華料理</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A2%85%E8%98%AD%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/riogrande-grill.jpg" alt="RIO GRANDE GRILL 横浜ベイクォーター" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140212/14054425/" target="_blank" rel="noopener">RIO GRANDE GRILL 横浜ベイクォーター</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">シュラスコ・ブラジル料理</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=RIO%20GRANDE%20GRILL%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/bayquarter/butter.jpg" alt="Butter 横浜ベイクォーター" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14052981/" target="_blank" rel="noopener">Butter 横浜ベイクォーター</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ダイニングバー・パンケーキ</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Butter%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="mores">
+      <div class="building__head">
+        <h2>横浜モアーズ</h2>
+        <p class="building__meta">横浜駅西口直結／<a href="https://tabelog.com/kanagawa/P003934/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/mores/yokohama-gonnosuke.jpg" alt="横浜 権之介" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14015506/" target="_blank" rel="noopener">横浜 権之介</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">9F</span>
+              <span class="store-card__genre">居酒屋・海鮮・鍋</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A8%AA%E6%B5%9C%20%E6%A8%A9%E4%B9%8B%E4%BB%8B%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/mores/moores-bbq.jpg" alt="モアーズ BBQ ビアガーデン" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14094553/" target="_blank" rel="noopener">モアーズ BBQ ビアガーデン</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">屋上</span>
+              <span class="store-card__genre">ビアガーデン・バーベキュー</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20BBQ%20%E3%83%93%E3%82%A2%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/mores/goodspoon.jpg" alt="good spoon pizzeria&cheese 横浜モアーズ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14078364/" target="_blank" rel="noopener">good spoon pizzeria&cheese 横浜モアーズ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">イタリアン・パスタ・ピザ</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=good%20spoon%20pizzeria%26cheese%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/mores/marfacafe.jpg" alt="MARFA CAFE" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14051691/" target="_blank" rel="noopener">MARFA CAFE</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">カフェ・アメリカ料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=MARFA%20CAFE%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/mores/shoronponmania.jpg" alt="横濱小籠包マニア" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14088108/" target="_blank" rel="noopener">横濱小籠包マニア</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">中華料理・台湾料理</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A8%AA%E6%BF%B1%E5%B0%8F%E7%B1%A0%E5%8C%85%E3%83%9E%E3%83%8B%E3%82%A2%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/mores/yakiniku-toraji.jpg" alt="焼肉トラジ 横浜モアーズ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14061465/" target="_blank" rel="noopener">焼肉トラジ 横浜モアーズ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">焼肉・韓国料理</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E3%83%88%E3%83%A9%E3%82%B8%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%A2%E3%82%A2%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="lumine">
+      <div class="building__head">
+        <h2>ルミネ横浜</h2>
+        <p class="building__meta">横浜駅西口直結／<a href="https://tabelog.com/kanagawa/P000280/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/kobe-motomachi-doria.jpg" alt="神戸元町ドリア ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14076511/" target="_blank" rel="noopener">神戸元町ドリア ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">洋食・オムライス</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%A5%9E%E6%88%B8%E5%85%83%E7%94%BA%E3%83%89%E3%83%AA%E3%82%A2%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/buriruhanten.jpg" alt="ブリル飯店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14081678/" target="_blank" rel="noopener">ブリル飯店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">7F</span>
+              <span class="store-card__genre">中華料理・飲茶</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%96%E3%83%AA%E3%83%AB%E9%A3%AF%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/kyoto-ishibei.jpg" alt="京都石塀小路豆ちゃ 横浜" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14001818/" target="_blank" rel="noopener">京都石塀小路豆ちゃ 横浜</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">7F</span>
+              <span class="store-card__genre">居酒屋・日本料理</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%BA%AC%E9%83%BD%E7%9F%B3%E5%A1%80%E5%B0%8F%E8%B7%AF%E8%B1%86%E3%81%A1%E3%82%83%20%E6%A8%AA%E6%B5%9C%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/agio.jpg" alt="マーケットレストラン AGIO" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14000388/" target="_blank" rel="noopener">マーケットレストラン AGIO</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">7F</span>
+              <span class="store-card__genre">イタリアン・洋食</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9E%E3%83%BC%E3%82%B1%E3%83%83%E3%83%88%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%20AGIO%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/tsuchikori.jpg" alt="和牛焼肉 土古里 ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14015133/" target="_blank" rel="noopener">和牛焼肉 土古里 ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">焼肉・韓国料理</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%92%8C%E7%89%9B%E7%84%BC%E8%82%89%20%E5%9C%9F%E5%8F%A4%E9%87%8C%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/mangotree.jpg" alt="マンゴツリーカフェ ルミネ横浜" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14010793/" target="_blank" rel="noopener">マンゴツリーカフェ ルミネ横浜</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">タイ料理・カフェ</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9E%E3%83%B3%E3%82%B4%E3%83%84%E3%83%AA%E3%83%BC%E3%82%AB%E3%83%95%E3%82%A7%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/lamaison-ensoleille.jpg" alt="ラ・メゾン アンソレイユターブル" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14006551/" target="_blank" rel="noopener">ラ・メゾン アンソレイユターブル</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ケーキ・カフェ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%BB%E3%83%A1%E3%82%BE%E3%83%B3%20%E3%82%A2%E3%83%B3%E3%82%BD%E3%83%AC%E3%82%A4%E3%83%A6%E3%82%BF%E3%83%BC%E3%83%96%E3%83%AB%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/kurobutaya.jpg" alt="黒ぶたや ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003728/" target="_blank" rel="noopener">黒ぶたや ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">居酒屋・豚しゃぶ</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%BB%92%E3%81%B6%E3%81%9F%E3%82%84%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/riku.jpg" alt="利久 ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14061053/" target="_blank" rel="noopener">利久 ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">牛タン専門店</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%88%A9%E4%B9%85%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/okinawajikan.jpg" alt="沖縄時間" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14001091/" target="_blank" rel="noopener">沖縄時間</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">居酒屋・沖縄料理</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%B2%96%E7%B8%84%E6%99%82%E9%96%93%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/sobakichi.jpg" alt="ソバキチ ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14073584/" target="_blank" rel="noopener">ソバキチ ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">そば</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%BD%E3%83%90%E3%82%AD%E3%83%81%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/yasaiyamei.jpg" alt="やさい家めい ルミネ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14029714/" target="_blank" rel="noopener">やさい家めい ルミネ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">しゃぶしゃぶ・野菜料理</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%84%E3%81%95%E3%81%84%E5%AE%B6%E3%82%81%E3%81%84%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/lumine/ottimo.jpg" alt="オッティモ・シーフード・ガーデン" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14012967/" target="_blank" rel="noopener">オッティモ・シーフード・ガーデン</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">イタリアン・ピザ</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%83%83%E3%83%86%E3%82%A3%E3%83%A2%E3%83%BB%E3%82%B7%E3%83%BC%E3%83%95%E3%83%BC%E3%83%89%E3%83%BB%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%20%E3%83%AB%E3%83%9F%E3%83%8D%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="newoman">
+      <div class="building__head">
+        <h2>ニュウマン横浜（JR横浜タワー 8F〜9Fほか）</h2>
+        <p class="building__meta">横浜駅西口・JR中央北改札/中央南改札直結（CIAL横浜と同じJR横浜タワー内）／<a href="https://tabelog.com/kanagawa/P097022/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/mizcasablanca.jpg" alt="ミズ カサブランカ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079650/" target="_blank" rel="noopener">ミズ カサブランカ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">8F</span>
+              <span class="store-card__genre">中華料理</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9F%E3%82%BA%20%E3%82%AB%E3%82%B5%E3%83%96%E3%83%A9%E3%83%B3%E3%82%AB%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/gyoza-noode.jpg" alt="餃子と〆の店 Nood e" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079739/" target="_blank" rel="noopener">餃子と〆の店 Nood e</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">8F</span>
+              <span class="store-card__genre">居酒屋・ラーメン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%A4%83%E5%AD%90%E3%81%A8%E3%80%86%E3%81%AE%E5%BA%97%20Nood%20e%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/yokohama-draseven.jpg" alt="横浜DRAセブン" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079382/" target="_blank" rel="noopener">横浜DRAセブン</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">9F</span>
+              <span class="store-card__genre">イタリアンバル</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A8%AA%E6%B5%9CDRA%E3%82%BB%E3%83%96%E3%83%B3%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/kappou-kabayaki88.jpg" alt="割烹蒲焼 横浜八十八 NEWoMan横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079570/" target="_blank" rel="noopener">割烹蒲焼 横浜八十八 NEWoMan横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">最上階</span>
+              <span class="store-card__genre">うなぎ・日本料理</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%89%B2%E7%83%B9%E8%92%B2%E7%84%BC%20%E6%A8%AA%E6%B5%9C%E5%85%AB%E5%8D%81%E5%85%AB%20NEWoMan%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/beatnuts.jpg" alt="ビートルナッツ タイ ベトナメーゼ ディムサム" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079505/" target="_blank" rel="noopener">ビートルナッツ タイ ベトナメーゼ ディムサム</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">タイ料理・ベトナム料理</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%93%E3%83%BC%E3%83%88%E3%83%AB%E3%83%8A%E3%83%83%E3%83%84%20%E3%82%BF%E3%82%A4%20%E3%83%99%E3%83%88%E3%83%8A%E3%83%A1%E3%83%BC%E3%82%BC%20%E3%83%87%E3%82%A3%E3%83%A0%E3%82%B5%E3%83%A0%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/800degrees-brewstand.jpg" alt="800°DEGREES CRAFT BREW STAND" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079393/" target="_blank" rel="noopener">800°DEGREES CRAFT BREW STAND</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">カフェ・ビアバー</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=800%C2%B0DEGREES%20CRAFT%20BREW%20STAND%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/800degrees-pizzeria.jpg" alt="800°DEGREES ARTISAN PIZZERIA" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079389/" target="_blank" rel="noopener">800°DEGREES ARTISAN PIZZERIA</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ピザ・イタリアン</span>
+              <span class="store-card__budget">¥6,000〜¥7,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=800%C2%B0DEGREES%20ARTISAN%20PIZZERIA%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/comedor-margarita.jpg" alt="COMEDOR DE MARGARITA MODERN MEXICANO" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079506/" target="_blank" rel="noopener">COMEDOR DE MARGARITA MODERN MEXICANO</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">メキシコ料理</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=COMEDOR%20DE%20MARGARITA%20MODERN%20MEXICANO%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/newoman/soba-sohou.jpg" alt="蕎麦 蘇枋" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079504/" target="_blank" rel="noopener">蕎麦 蘇枋</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">そば・居酒屋</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%95%8E%E9%BA%A6%20%E8%98%87%E6%9E%8B%20%E3%83%8B%E3%83%A5%E3%82%A6%E3%83%9E%E3%83%B3%E6%A8%AA%E6%B5%9C%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E3%82%BF%E3%83%AF%E3%83%BC%208F%E3%80%9C9F%E3%81%BB%E3%81%8B%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="porta">
+      <div class="building__head">
+        <h2>横浜ポルタ（東口地下街）</h2>
+        <p class="building__meta">横浜駅東口直結（そごう横浜店・ベイクォーターとも地下通路で接続）／<a href="https://tabelog.com/kanagawa/P003437/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/porta/siam-orchid.jpg" alt="サイアムオーキッド 横浜ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14074974/" target="_blank" rel="noopener">サイアムオーキッド 横浜ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">タイ料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%B5%E3%82%A4%E3%82%A2%E3%83%A0%E3%82%AA%E3%83%BC%E3%82%AD%E3%83%83%E3%83%89%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%EF%BC%88%E6%9D%B1%E5%8F%A3%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/porta/gosyorri.jpg" alt="吾照里 横浜東口ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14035240/" target="_blank" rel="noopener">吾照里 横浜東口ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">韓国料理・焼肉・居酒屋</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%90%BE%E7%85%A7%E9%87%8C%20%E6%A8%AA%E6%B5%9C%E6%9D%B1%E5%8F%A3%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%EF%BC%88%E6%9D%B1%E5%8F%A3%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/porta/kineya.jpg" alt="杵屋 横浜ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14005604/" target="_blank" rel="noopener">杵屋 横浜ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">うどん・そば・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%9D%B5%E5%B1%8B%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%EF%BC%88%E6%9D%B1%E5%8F%A3%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/porta/chunshuitang.jpg" alt="春水堂 横浜ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14064556/" target="_blank" rel="noopener">春水堂 横浜ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">台湾料理・カフェ・スイーツ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%98%A5%E6%B0%B4%E5%A0%82%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%EF%BC%88%E6%9D%B1%E5%8F%A3%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/porta/maguro-donya.jpg" alt="まぐろ問屋 三浦三崎港 横浜ポルタ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14067919/" target="_blank" rel="noopener">まぐろ問屋 三浦三崎港 横浜ポルタ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">回転寿司</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%BE%E3%81%90%E3%82%8D%E5%95%8F%E5%B1%8B%20%E4%B8%89%E6%B5%A6%E4%B8%89%E5%B4%8E%E6%B8%AF%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%83%9D%E3%83%AB%E3%82%BF%EF%BC%88%E6%9D%B1%E5%8F%A3%E5%9C%B0%E4%B8%8B%E8%A1%97%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="skybuilding">
+      <div class="building__head">
+        <h2>横浜スカイビル</h2>
+        <p class="building__meta">東口直結（地下街ポルタ経由、そごう横浜店とも直結）／<a href="https://tabelog.com/kanagawa/P020861/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/tenzan.jpg" alt="天山" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003722/" target="_blank" rel="noopener">天山</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">11F</span>
+              <span class="store-card__genre">焼肉・韓国料理</span>
+              <span class="store-card__budget">¥6,000〜¥7,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%A4%A9%E5%B1%B1%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/hoshinonaruki.jpg" alt="横浜 星のなる木" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14062141/" target="_blank" rel="noopener">横浜 星のなる木</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">28F</span>
+              <span class="store-card__genre">日本料理・海鮮・うなぎ</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A8%AA%E6%B5%9C%20%E6%98%9F%E3%81%AE%E3%81%AA%E3%82%8B%E6%9C%A8%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/kamakurayama.jpg" alt="鎌倉山 横浜スカイビル店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14000074/" target="_blank" rel="noopener">鎌倉山 横浜スカイビル店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">29F</span>
+              <span class="store-card__genre">ヨーロッパ料理・洋食</span>
+              <span class="store-card__budget">¥20,000〜¥29,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%8E%8C%E5%80%89%E5%B1%B1%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/mikuni-yokohama.jpg" alt="ミクニ ヨコハマ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14012634/" target="_blank" rel="noopener">ミクニ ヨコハマ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">29F</span>
+              <span class="store-card__genre">フレンチ・ステーキ</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9F%E3%82%AF%E3%83%8B%20%E3%83%A8%E3%82%B3%E3%83%8F%E3%83%9E%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/umenohana.jpg" alt="梅の花 横浜スカイビル店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14012969/" target="_blank" rel="noopener">梅の花 横浜スカイビル店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">29F</span>
+              <span class="store-card__genre">豆腐料理・日本料理</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A2%85%E3%81%AE%E8%8A%B1%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/shonan-baru-hanatare.jpg" alt="湘南バルはなたれ The Fish and Oysters" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14072437/" target="_blank" rel="noopener">湘南バルはなたれ The Fish and Oysters</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">バル・オイスターバー・イタリアン</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%B9%98%E5%8D%97%E3%83%90%E3%83%AB%E3%81%AF%E3%81%AA%E3%81%9F%E3%82%8C%20The%20Fish%20and%20Oysters%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/mantra.jpg" alt="マントラ スカイビル店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14031998/" target="_blank" rel="noopener">マントラ スカイビル店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">インド料理・カレー</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9E%E3%83%B3%E3%83%88%E3%83%A9%20%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/hokkaido-gourmet.jpg" alt="Hokkaido Gourmet Dining 北海道 横浜スカイビル店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14032438/" target="_blank" rel="noopener">Hokkaido Gourmet Dining 北海道 横浜スカイビル店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">居酒屋・海鮮・鍋</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Hokkaido%20Gourmet%20Dining%20%E5%8C%97%E6%B5%B7%E9%81%93%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%E5%BA%97%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/skybuilding/refresh-dining-coo.jpg" alt="リフレッシュダイニング クー" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14009960/" target="_blank" rel="noopener">リフレッシュダイニング クー</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">カフェ・居酒屋・洋食</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%AA%E3%83%95%E3%83%AC%E3%83%83%E3%82%B7%E3%83%A5%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%20%E3%82%AF%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%93%E3%83%AB%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="yodobashi">
+      <div class="building__head">
+        <h2>ヨドバシ横浜（地下2F「ワイワイグルメ ヨドバシ横浜」）</h2>
+        <p class="building__meta">西口地下街経由で直結／<a href="https://tabelog.com/kanagawa/P008401/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/yodobashi/matsurihina.jpg" alt="祭雛 ヨドバシ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14003841/" target="_blank" rel="noopener">祭雛 ヨドバシ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B2F</span>
+              <span class="store-card__genre">寿司・海鮮・ビュッフェ</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%A5%AD%E9%9B%9B%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%EF%BC%88%E5%9C%B0%E4%B8%8B2F%E3%80%8C%E3%83%AF%E3%82%A4%E3%83%AF%E3%82%A4%E3%82%B0%E3%83%AB%E3%83%A1%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%E3%80%8D%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/yodobashi/nepal-royal.jpg" alt="ネパール・エスニック料理 ザ・ロイヤル" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14085619/" target="_blank" rel="noopener">ネパール・エスニック料理 ザ・ロイヤル</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">ネパール料理・インド料理・カレー</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%8D%E3%83%91%E3%83%BC%E3%83%AB%E3%83%BB%E3%82%A8%E3%82%B9%E3%83%8B%E3%83%83%E3%82%AF%E6%96%99%E7%90%86%20%E3%82%B6%E3%83%BB%E3%83%AD%E3%82%A4%E3%83%A4%E3%83%AB%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%EF%BC%88%E5%9C%B0%E4%B8%8B2F%E3%80%8C%E3%83%AF%E3%82%A4%E3%83%AF%E3%82%A4%E3%82%B0%E3%83%AB%E3%83%A1%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%E3%80%8D%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/yodobashi/gyukatsu-kyoto-katsugyu.jpg" alt="牛カツ京都勝牛 ヨドバシ横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14062789/" target="_blank" rel="noopener">牛カツ京都勝牛 ヨドバシ横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">食堂・揚げ物・牛料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%89%9B%E3%82%AB%E3%83%84%E4%BA%AC%E9%83%BD%E5%8B%9D%E7%89%9B%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%EF%BC%88%E5%9C%B0%E4%B8%8B2F%E3%80%8C%E3%83%AF%E3%82%A4%E3%83%AF%E3%82%A4%E3%82%B0%E3%83%AB%E3%83%A1%20%E3%83%A8%E3%83%89%E3%83%90%E3%82%B7%E6%A8%AA%E6%B5%9C%E3%80%8D%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="sheraton">
+      <div class="building__head">
+        <h2>横浜ベイシェラトン ホテル&amp;タワーズ</h2>
+        <p class="building__meta">西口直結（屋根付き連絡通路）／<a href="https://tabelog.com/kanagawa/P026141/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sheraton/teppanyaki-sagami.jpg" alt="鉄板焼 さがみ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14001311/" target="_blank" rel="noopener">鉄板焼 さがみ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">28F</span>
+              <span class="store-card__genre">鉄板焼き・ステーキ</span>
+              <span class="store-card__budget">¥30,000〜¥39,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%89%84%E6%9D%BF%E7%84%BC%20%E3%81%95%E3%81%8C%E3%81%BF%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%B7%E3%82%A7%E3%83%A9%E3%83%88%E3%83%B3%20%E3%83%9B%E3%83%86%E3%83%AB%26amp%3B%E3%82%BF%E3%83%AF%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sheraton/french-bayview.jpg" alt="フレンチ ベイ・ビュー" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14000420/" target="_blank" rel="noopener">フレンチ ベイ・ビュー</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">最上階</span>
+              <span class="store-card__genre">フレンチ</span>
+              <span class="store-card__budget">¥15,000〜¥19,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%95%E3%83%AC%E3%83%B3%E3%83%81%20%E3%83%99%E3%82%A4%E3%83%BB%E3%83%93%E3%83%A5%E3%83%BC%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%B7%E3%82%A7%E3%83%A9%E3%83%88%E3%83%B3%20%E3%83%9B%E3%83%86%E3%83%AB%26amp%3B%E3%82%BF%E3%83%AF%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sheraton/allday-compass.jpg" alt="オールデイダイニング コンパス" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14036508/" target="_blank" rel="noopener">オールデイダイニング コンパス</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ビュッフェ・海鮮</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%83%BC%E3%83%AB%E3%83%87%E3%82%A4%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%20%E3%82%B3%E3%83%B3%E3%83%91%E3%82%B9%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%B7%E3%82%A7%E3%83%A9%E3%83%88%E3%83%B3%20%E3%83%9B%E3%83%86%E3%83%AB%26amp%3B%E3%82%BF%E3%83%AF%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sheraton/sairyu.jpg" alt="中国料理 彩龍" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14001312/" target="_blank" rel="noopener">中国料理 彩龍</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">中華料理</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E5%9B%BD%E6%96%99%E7%90%86%20%E5%BD%A9%E9%BE%8D%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%B7%E3%82%A7%E3%83%A9%E3%83%88%E3%83%B3%20%E3%83%9B%E3%83%86%E3%83%AB%26amp%3B%E3%82%BF%E3%83%AF%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/sheraton/seawind.jpg" alt="ラウンジ シーウインド" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14005194/" target="_blank" rel="noopener">ラウンジ シーウインド</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">カフェ・ビュッフェ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%82%A6%E3%83%B3%E3%82%B8%20%E3%82%B7%E3%83%BC%E3%82%A6%E3%82%A4%E3%83%B3%E3%83%89%20%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%82%B7%E3%82%A7%E3%83%A9%E3%83%88%E3%83%B3%20%E3%83%9B%E3%83%86%E3%83%AB%26amp%3B%E3%82%BF%E3%83%AF%E3%83%BC%E3%82%BA%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="cialannex">
+      <div class="building__head">
+        <h2>CIAL横浜ANNEX（JR横浜鶴屋町ビル）</h2>
+        <p class="building__meta">きた東口から歩行者デッキ「はまレールウォーク」でCIAL横浜と直結／各店をHot Pepperグルメで個別確認（食べログ側の建物一括フィルターは未対応）</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/cialannex/schmatz.jpg" alt="シュマッツ ビア ダイニング CIAL横浜ANNEX" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140212/14079767/" target="_blank" rel="noopener">シュマッツ ビア ダイニング CIAL横浜ANNEX</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">ビアホール・ドイツ料理</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%B7%E3%83%A5%E3%83%9E%E3%83%83%E3%83%84%20%E3%83%93%E3%82%A2%20%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%20CIAL%E6%A8%AA%E6%B5%9CANNEX%20CIAL%E6%A8%AA%E6%B5%9CANNEX%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E9%B6%B4%E5%B1%8B%E7%94%BA%E3%83%93%E3%83%AB%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/cialannex/ikanosumi.jpg" alt="いかの墨 シァル横浜アネックス店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079951/" target="_blank" rel="noopener">いかの墨 シァル横浜アネックス店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">居酒屋・海鮮</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%84%E3%81%8B%E3%81%AE%E5%A2%A8%20%E3%82%B7%E3%82%A1%E3%83%AB%E6%A8%AA%E6%B5%9C%E3%82%A2%E3%83%8D%E3%83%83%E3%82%AF%E3%82%B9%E5%BA%97%20CIAL%E6%A8%AA%E6%B5%9CANNEX%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E9%B6%B4%E5%B1%8B%E7%94%BA%E3%83%93%E3%83%AB%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/cialannex/bistro-katsuki.jpg" alt="ビストロカツキ CIAL横浜ANNEX店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14079764/" target="_blank" rel="noopener">ビストロカツキ CIAL横浜ANNEX店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ビストロ・カフェ</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%93%E3%82%B9%E3%83%88%E3%83%AD%E3%82%AB%E3%83%84%E3%82%AD%20CIAL%E6%A8%AA%E6%B5%9CANNEX%E5%BA%97%20CIAL%E6%A8%AA%E6%B5%9CANNEX%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E9%B6%B4%E5%B1%8B%E7%94%BA%E3%83%93%E3%83%AB%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/cialannex/kushikatsu-tanaka.jpg" alt="串カツ田中 CIAL横浜ANNEX店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140212/14092771/" target="_blank" rel="noopener">串カツ田中 CIAL横浜ANNEX店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">串揚げ・居酒屋</span>
+              <span class="store-card__budget">¥4,000〜¥5,000</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%B2%E3%82%AB%E3%83%84%E7%94%B0%E4%B8%AD%20CIAL%E6%A8%AA%E6%B5%9CANNEX%E5%BA%97%20CIAL%E6%A8%AA%E6%B5%9CANNEX%EF%BC%88JR%E6%A8%AA%E6%B5%9C%E9%B6%B4%E5%B1%8B%E7%94%BA%E3%83%93%E3%83%AB%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="ekinia">
+      <div class="building__head">
+        <h2>エキニア横浜</h2>
+        <p class="building__meta">横浜駅直結（改札内外エキナカ商業施設）／<a href="https://tabelog.com/kanagawa/P097414/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/ekinia/shizenya.jpg" alt="自然や" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14007246/" target="_blank" rel="noopener">自然や</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">地下</span>
+              <span class="store-card__genre">居酒屋・そば・うどん</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%AA%E7%84%B6%E3%82%84%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/ekinia/tsukiakari.jpg" alt="酒菜の隠れ家 月あかり 横浜駅前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14041958/" target="_blank" rel="noopener">酒菜の隠れ家 月あかり 横浜駅前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">居酒屋・海鮮・鍋</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%85%92%E8%8F%9C%E3%81%AE%E9%9A%A0%E3%82%8C%E5%AE%B6%20%E6%9C%88%E3%81%82%E3%81%8B%E3%82%8A%20%E6%A8%AA%E6%B5%9C%E9%A7%85%E5%89%8D%E5%BA%97%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/ekinia/shijuhachigyoba.jpg" alt="四十八漁場 エキニア横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14043141/" target="_blank" rel="noopener">四十八漁場 エキニア横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">居酒屋・海鮮・日本酒バー</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%9B%9B%E5%8D%81%E5%85%AB%E6%BC%81%E5%A0%B4%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/ekinia/tsukadanojo.jpg" alt="北海道シントク町 塚田農場 エキニア横浜店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14042645/" target="_blank" rel="noopener">北海道シントク町 塚田農場 エキニア横浜店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">居酒屋・肉料理・ジンギスカン</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8C%97%E6%B5%B7%E9%81%93%E3%82%B7%E3%83%B3%E3%83%88%E3%82%AF%E7%94%BA%20%E5%A1%9A%E7%94%B0%E8%BE%B2%E5%A0%B4%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%E5%BA%97%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/ekinia/domadoma.jpg" alt="居酒家 土間土間 横浜駅前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14046166/" target="_blank" rel="noopener">居酒家 土間土間 横浜駅前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">居酒屋・創作料理・日本料理</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%B1%85%E9%85%92%E5%AE%B6%20%E5%9C%9F%E9%96%93%E5%9C%9F%E9%96%93%20%E6%A8%AA%E6%B5%9C%E9%A7%85%E5%89%8D%E5%BA%97%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/ekinia/oysterlab.jpg" alt="Oyster Lab 横浜駅前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14092709/" target="_blank" rel="noopener">Oyster Lab 横浜駅前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">オイスターバー・かき・ラーメン</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Oyster%20Lab%20%E6%A8%AA%E6%B5%9C%E9%A7%85%E5%89%8D%E5%BA%97%20%E3%82%A8%E3%82%AD%E3%83%8B%E3%82%A2%E6%A8%AA%E6%B5%9C%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="yokohamafront">
+      <div class="building__head">
+        <h2>ザ・ヨコハマフロント（相鉄ホテルズ ザ・スプラジール横浜含む）</h2>
+        <p class="building__meta">きた西口から歩行者デッキ「はまレールウォーク」で直結／各店をHot Pepper・食べログで個別確認（建物一括フィルターは未対応）</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="yokohama-photos/yokohamafront/baybrewing.jpg" alt="横浜ベイブルーイング 横浜フロント店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1401/A140101/14095200/" target="_blank" rel="noopener">横浜ベイブルーイング 横浜フロント店</a><span class="both-badge">両方確認済み</span></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ビアバー・クラフトビール</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%A8%AA%E6%B5%9C%E3%83%99%E3%82%A4%E3%83%96%E3%83%AB%E3%83%BC%E3%82%A4%E3%83%B3%E3%82%B0%20%E6%A8%AA%E6%B5%9C%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E5%BA%97%20%E3%82%B6%E3%83%BB%E3%83%A8%E3%82%B3%E3%83%8F%E3%83%9E%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%EF%BC%88%E7%9B%B8%E9%89%84%E3%83%9B%E3%83%86%E3%83%AB%E3%82%BA%20%E3%82%B6%E3%83%BB%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B8%E3%83%BC%E3%83%AB%E6%A8%AA%E6%B5%9C%E5%90%AB%E3%82%80%EF%BC%89%20%E6%A8%AA%E6%B5%9C%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+      <p style="padding:0 1.4rem 1rem; margin:0; color:var(--muted); font-size:.85rem;">館内には他にも1F「SAKE BASE モロツヨシ」「DUMBO PIZZA FACTORY」「トラットリア セレーナ」、4F相鉄ホテルズ ザ・スプラジール横浜「酢重ダイニング」「PLANCHA L」などがありますが、ネット予約可否を確認できたのは上記のみです。</p>
+    </section>
+
+    <p class="footer-note">
+      Hot Pepper側もあわせて確認する場合は、<a href="https://www.hotpepper.jp/SA12/Y135/net1/" target="_blank" rel="noopener">Hot Pepperグルメ「横浜 ネット予約できるお店」</a>で店名検索してください。CIAL横浜本体（地下フードホール「ハマチカ」ほか）は基本的に予約なしで入れるフードコート形式の店が中心のため対象外です。JR東日本ホテルメッツ横浜は館内に朝食専用の飲食スペースのみでディナー予約可能なレストランが見当たらず、相鉄フレッサイン横浜（東口・西口とも）はビジネスホテルでレストランが確認できなかったため、どちらも掲載していません。
+    </p>
+  </main>
+  <script>
+  (function () {
+    var GENRE_KEYWORDS = {
+      japanese: ['日本料理', '懐石'],
+      seafood: ['海鮮', '寿司', '牡蠣', 'オイスター', 'うなぎ', 'シーフード'],
+      yakiniku: ['焼肉', '韓国料理', 'ホルモン', '冷麺'],
+      shabu: ['すき焼き', 'しゃぶしゃぶ', 'しゃぶ'],
+      chinese: ['中華', '小籠包', '飲茶', '四川', '台湾料理'],
+      izakaya: ['居酒屋'],
+      soba: ['そば', 'うどん', '天ぷら'],
+      italian: ['イタリア', 'パスタ', 'ピザ'],
+      french: ['フレンチ', 'ビストロ', '洋食', 'ヨーロッパ', 'オムライス'],
+      steak: ['ステーキ', '鉄板焼き'],
+      cafe: ['カフェ', 'スイーツ', 'ケーキ', 'パンケーキ', 'ビュッフェ'],
+      beer: ['ビア'],
+      ethnic: ['タイ料理', 'ベトナム', 'インド', 'ネパール', 'エスニック', 'アジア'],
+      okinawa: ['沖縄', 'ハワイアン'],
+      other: ['シュラスコ', 'ブラジル', 'メキシコ', '串揚げ', '牛タン', '食堂', '豆腐料理', 'ジンギスカン', 'ドイツ料理']
+    };
+
+    function inBudgetRange(min, key) {
+      switch (key) {
+        case 'lt3000': return min < 3000;
+        case '3000-4999': return min >= 3000 && min < 5000;
+        case '5000-7999': return min >= 5000 && min < 8000;
+        case '8000-14999': return min >= 8000 && min < 15000;
+        case 'gte15000': return min >= 15000;
+        default: return false;
+      }
+    }
+
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.store-card'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('.building'));
+    var genreChips = Array.prototype.slice.call(document.querySelectorAll('#filter-genre input'));
+    var budgetChips = Array.prototype.slice.call(document.querySelectorAll('#filter-budget input'));
+    var resetButton = document.getElementById('filter-reset');
+    var countEl = document.getElementById('filter-count');
+
+    var entries = cards.map(function (card) {
+      var genreEl = card.querySelector('.store-card__genre');
+      var budgetEl = card.querySelector('.store-card__budget');
+      var budgetMatch = budgetEl ? budgetEl.textContent.match(/[\d,]+/) : null;
+      return {
+        card: card,
+        section: card.closest('.building'),
+        genre: genreEl ? genreEl.textContent : '',
+        budgetMin: budgetMatch ? parseInt(budgetMatch[0].replace(/,/g, ''), 10) : 0
+      };
+    });
+
+    function checkedValues(chips) {
+      return chips.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+    }
+
+    function applyFilter() {
+      var selectedGenres = checkedValues(genreChips);
+      var selectedBudgets = checkedValues(budgetChips);
+      var visibleCount = 0;
+
+      entries.forEach(function (e) {
+        var genreOk = selectedGenres.length === 0 || selectedGenres.some(function (key) {
+          return GENRE_KEYWORDS[key].some(function (kw) { return e.genre.indexOf(kw) !== -1; });
+        });
+        var budgetOk = selectedBudgets.length === 0 || selectedBudgets.some(function (key) {
+          return inBudgetRange(e.budgetMin, key);
+        });
+        var matches = genreOk && budgetOk;
+        e.card.style.display = matches ? '' : 'none';
+        if (matches) visibleCount++;
+      });
+
+      sections.forEach(function (section) {
+        var anyVisible = Array.prototype.some.call(
+          section.querySelectorAll('.store-card'),
+          function (c) { return c.style.display !== 'none'; }
+        );
+        section.style.display = anyVisible ? '' : 'none';
+      });
+
+      countEl.textContent = visibleCount + ' / ' + entries.length + ' 件表示中';
+    }
+
+    genreChips.concat(budgetChips).forEach(function (chip) {
+      chip.addEventListener('change', applyFilter);
+    });
+    resetButton.addEventListener('click', function () {
+      genreChips.concat(budgetChips).forEach(function (c) { c.checked = false; });
+      applyFilter();
+    });
+
+    applyFilter();
+  })();
+  </script>
+</body>
+</html>
