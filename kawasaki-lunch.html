@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="川崎駅直結・駅前の商業施設内にあり、食べログでネット予約ができ、ランチ予算が登録されているレストラン一覧">
+  <title>川崎駅直結レストラン一覧（ランチ ネット予約可）</title>
+  <style>
+    :root { color-scheme: light; --ink:#243247; --muted:#617089; --line:#dbe3ee; --surface:#fff; --canvas:#f3f6fa; --brand:#176b87; --brand-dark:#0d4e65; --shadow:0 12px 30px rgba(24,49,78,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",sans-serif; line-height:1.7; }
+    a { color:var(--brand-dark); }
+    a:focus-visible { outline:3px solid #f4b942; outline-offset:3px; border-radius:4px; }
+    .hero { padding:3.5rem 1.25rem 3rem; color:#fff; background:linear-gradient(135deg,#0d5068,#1b7d87 58%,#77a9a2); }
+    .hero__inner, main { max-width:1080px; margin:0 auto; }
+    .eyebrow { margin:0 0 .4rem; font-size:.82rem; font-weight:700; letter-spacing:.12em; opacity:.86; }
+    h1 { margin:0; font-size:clamp(1.5rem,4vw,2.3rem); line-height:1.3; }
+    .lead { max-width:44rem; margin:1rem 0 0; color:#e4f3f3; font-size:.95rem; }
+    .jump-nav { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; }
+    .jump-nav a { padding:.32rem .65rem; color:#fff; text-decoration:none; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:.84rem; }
+    .jump-nav a:hover { background:rgba(255,255,255,.16); }
+    main { padding:2rem 1.25rem 4rem; }
+    .note { margin:0 0 1.75rem; padding:.9rem 1rem; color:#5d4c25; background:#fff9e9; border-left:4px solid #e4b94e; font-size:.87rem; }
+    .note p { margin:.35rem 0; }
+    .note p:first-child { margin-top:0; }
+    .note p:last-child { margin-bottom:0; }
+    .building { margin:0 0 1.75rem; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .building__head { padding:1.1rem 1.4rem 1rem; background:#edf7f7; border-bottom:1px solid var(--line); }
+    .building__head h2 { margin:0; font-size:1.2rem; }
+    .building__meta { margin:.35rem 0 0; color:var(--muted); font-size:.85rem; }
+    .building__meta a { font-weight:700; }
+    .store-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; padding:1.1rem 1.4rem 1.4rem; }
+    .store-card { display:flex; flex-direction:column; overflow:hidden; background:var(--canvas); border:1px solid var(--line); border-radius:12px; }
+    .store-card__photo { display:block; width:100%; height:220px; object-fit:cover; background:#e7edf3; }
+    .store-card__body { padding:.75rem .9rem .9rem; }
+    .store-card__name { margin:0; font-size:1rem; font-weight:700; line-height:1.4; }
+    .store-card__row { display:flex; flex-wrap:wrap; gap:.4rem .7rem; margin-top:.4rem; font-size:.85rem; }
+    .store-card__floor { color:var(--brand-dark); font-weight:700; }
+    .store-card__genre { color:var(--muted); }
+    .store-card__budget { color:var(--brand-dark); font-weight:700; }
+    .store-card__map { margin-top:.55rem; }
+    .store-card__map a { display:inline-block; text-decoration:none; font-size:.82rem; padding:.3rem .65rem; border:1px solid var(--line); border-radius:6px; background:#fff; }
+    .store-card__map a:hover { background:#edf7f7; }
+    .both-badge { display:inline-block; margin-left:.4rem; padding:.05rem .4rem; color:#0d4e65; background:#dff1f4; border-radius:4px; font-size:.68rem; font-weight:700; vertical-align:.1em; }
+    .footer-note { margin:1.5rem 0 0; color:var(--muted); font-size:.85rem; }
+    .footer-note a { font-weight:700; }
+    .filter-bar { margin:0 0 1.75rem; padding:1rem 1.4rem 1.2rem; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .filter-bar__group { margin:0 0 .9rem; border:0; padding:0; }
+    .filter-bar__group:last-of-type { margin-bottom:0; }
+    .filter-bar__group legend { padding:0 0 .4rem; font-size:.8rem; color:var(--muted); font-weight:700; }
+    .filter-chips { display:flex; flex-wrap:wrap; gap:.45rem; }
+    .filter-chip input { position:absolute; opacity:0; width:1px; height:1px; }
+    .filter-chip span { display:inline-block; padding:.32rem .75rem; color:var(--ink); background:#fff; border:1px solid var(--line); border-radius:999px; font-size:.82rem; cursor:pointer; user-select:none; }
+    .filter-chip input:checked + span { color:#fff; background:var(--brand-dark); border-color:var(--brand-dark); }
+    .filter-chip input:focus-visible + span { outline:3px solid #f4b942; outline-offset:2px; }
+    .filter-bar__footer { display:flex; align-items:center; gap:.9rem; margin-top:1rem; }
+    .filter-bar__reset { padding:.4rem .8rem; color:var(--brand-dark); background:#edf7f7; border:1px solid var(--line); border-radius:8px; font-size:.85rem; cursor:pointer; }
+    .filter-bar__reset:hover { background:#dff1f4; }
+    .filter-bar__count { margin-left:auto; font-size:.85rem; color:var(--brand-dark); font-weight:700; white-space:nowrap; }
+    @media (max-width:640px) {
+      .hero{padding:2.5rem 1rem 2.2rem;} main{padding:1.25rem .75rem 3rem;}
+      .store-grid { grid-template-columns:1fr; padding:.9rem .9rem 1.1rem; gap:.8rem; }
+      .store-card__photo { height:190px; }
+      .filter-bar { padding:.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero__inner">
+    <p class="eyebrow">KAWASAKI STATION · DIRECTLY CONNECTED</p>
+    <h1>川崎駅直結レストラン一覧（ランチ ネット予約可）</h1>
+    <p class="lead">川崎駅と直結・連絡通路（地下街を含む）でつながる施設に加え、駅前すぐのリバーク、徒歩圏のラ チッタデッラを含む9施設内のレストランのうち、食べログの「ネット予約できるお店」フィルターで実際にヒットし、かつ「昼の予算」が登録されている店を、施設ごとにフロア順で掲載しています（43件）。店名は食べログの店舗ページにリンクしています。</p>
+    <nav class="jump-nav" aria-label="施設へのリンク">
+      <a href="#lazona">ラゾーナ川崎プラザ（9）</a>
+      <a href="#atre">アトレ川崎（4）</a>
+      <a href="#azalea">川崎アゼリア（5）</a>
+      <a href="#lufront">川崎ルフロン（1）</a>
+      <a href="#muza">ミューザ川崎（5）</a>
+      <a href="#jrtower">JR川崎タワー（6）</a>
+      <a href="#dice">川崎ダイス（3）</a>
+      <a href="#river">川崎駅前タワーリバーク（3）</a>
+      <a href="#cittadella">ラ チッタデッラ（7）</a>
+    </nav>
+  </div></header>
+  <main>
+    <section class="filter-bar" aria-label="絞り込み">
+      <fieldset class="filter-bar__group">
+        <legend>ジャンル（複数選択可）</legend>
+        <div class="filter-chips" id="filter-genre">
+          <label class="filter-chip"><input type="checkbox" value="japanese"><span>日本料理・懐石</span></label>
+          <label class="filter-chip"><input type="checkbox" value="seafood"><span>海鮮・寿司・うなぎ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="yakiniku"><span>焼肉・韓国料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="shabu"><span>すき焼き・しゃぶしゃぶ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="chinese"><span>中華料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="izakaya"><span>居酒屋</span></label>
+          <label class="filter-chip"><input type="checkbox" value="soba"><span>そば・うどん・天ぷら</span></label>
+          <label class="filter-chip"><input type="checkbox" value="italian"><span>イタリアン・パスタ・ピザ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="french"><span>フレンチ・ビストロ・洋食</span></label>
+          <label class="filter-chip"><input type="checkbox" value="steak"><span>ステーキ・鉄板焼き</span></label>
+          <label class="filter-chip"><input type="checkbox" value="cafe"><span>カフェ・スイーツ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="beer"><span>ビアバー・ビアホール</span></label>
+          <label class="filter-chip"><input type="checkbox" value="ethnic"><span>アジア・エスニック料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="okinawa"><span>沖縄・ハワイアン</span></label>
+          <label class="filter-chip"><input type="checkbox" value="other"><span>その他・郷土料理</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="filter-bar__group">
+        <legend>予算・ランチ（複数選択可）</legend>
+        <div class="filter-chips" id="filter-budget">
+          <label class="filter-chip"><input type="checkbox" value="lt1000"><span>〜¥999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="1000-1999"><span>¥1,000〜¥1,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="2000-2999"><span>¥2,000〜¥2,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="3000-4999"><span>¥3,000〜¥4,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="gte5000"><span>¥5,000〜</span></label>
+        </div>
+      </fieldset>
+      <div class="filter-bar__footer">
+        <button type="button" class="filter-bar__reset" id="filter-reset">条件をリセット</button>
+        <p class="filter-bar__count" id="filter-count" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <div class="note">
+      <p><strong>掲載基準：</strong>食べログの各施設ページで「ネット予約できるお店」フィルター（cond11）とレストランカテゴリを適用し、表示された店舗のうち、食べログに「昼の予算」が登録されている店舗を掲載しています（2026年9月時点）。ランチ営業の有無・時間帯は各店舗ページでご確認ください。Hot Pepper側は未確認です（無いという意味ではありません）。</p>
+      <p>フロアは食べログ掲載の住所から読み取ったもので、不明な店舗は「—」としています（フロアが分かる店舗を上から順に並べ、不明な店舗は末尾にまとめています）。写真は食べログ掲載の店舗写真で、写真の無い店は写真欄を省いています。</p>
+      <p>営業時間・予約可否・価格は変動するため、予約前に必ず最新情報をご確認ください。</p>
+    </div>
+
+    <section class="building" id="lazona">
+      <div class="building__head">
+        <h2>ラゾーナ川崎プラザ</h2>
+        <p class="building__meta">川崎駅西口直結（連絡通路）／<a href="https://tabelog.com/kanagawa/P020540/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14061636.jpg" alt="カリフォルニア・ピザ・キッチン ラゾーナ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14061636/" target="_blank" rel="noopener">カリフォルニア・ピザ・キッチン ラゾーナ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">ピザ・アメリカ料理・アジア・エスニック</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AB%E3%83%AA%E3%83%95%E3%82%A9%E3%83%AB%E3%83%8B%E3%82%A2%E3%83%BB%E3%83%94%E3%82%B6%E3%83%BB%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14005376.jpg" alt="越後 叶家 ラゾーナ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14005376/" target="_blank" rel="noopener">越後 叶家 ラゾーナ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">そば・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%B6%8A%E5%BE%8C%20%E5%8F%B6%E5%AE%B6%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14070891.jpg" alt="マンゴツリーカフェ 川崎" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14070891/" target="_blank" rel="noopener">マンゴツリーカフェ 川崎</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">タイ料理・カレー・カフェ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9E%E3%83%B3%E3%82%B4%E3%83%84%E3%83%AA%E3%83%BC%E3%82%AB%E3%83%95%E3%82%A7%20%E5%B7%9D%E5%B4%8E%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14010213/" target="_blank" rel="noopener">オイスタープレート ラゾーナ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">かき・ヨーロッパ料理・オイスターバー</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%82%A4%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14054321.jpg" alt="牛たん炭焼 利久  ラゾーナ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14054321/" target="_blank" rel="noopener">牛たん炭焼 利久 ラゾーナ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">牛タン・居酒屋</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%89%9B%E3%81%9F%E3%82%93%E7%82%AD%E7%84%BC%20%E5%88%A9%E4%B9%85%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14005372.jpg" alt="カプリチョーザ トマト＆ガーリック ラゾーナ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14005372/" target="_blank" rel="noopener">カプリチョーザ トマト＆ガーリック ラゾーナ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">イタリアン・パスタ・ピザ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AB%E3%83%97%E3%83%AA%E3%83%81%E3%83%A7%E3%83%BC%E3%82%B6%20%E3%83%88%E3%83%9E%E3%83%88%EF%BC%86%E3%82%AC%E3%83%BC%E3%83%AA%E3%83%83%E3%82%AF%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14004851.jpg" alt="南国酒家 LAZONA川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14004851/" target="_blank" rel="noopener">南国酒家 LAZONA川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">中華料理・餃子</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%97%E5%9B%BD%E9%85%92%E5%AE%B6%20LAZONA%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14103976.jpg" alt="焼肉 平城苑 ラゾーナ川崎プラザ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14103976/" target="_blank" rel="noopener">焼肉 平城苑 ラゾーナ川崎プラザ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">焼肉・韓国料理・冷麺</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%20%E5%B9%B3%E5%9F%8E%E8%8B%91%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lazona/14070849.jpg" alt="やさい家めい ラゾーナ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14070849/" target="_blank" rel="noopener">やさい家めい ラゾーナ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">しゃぶしゃぶ・ビュッフェ・豚しゃぶ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%84%E3%81%95%E3%81%84%E5%AE%B6%E3%82%81%E3%81%84%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%E3%82%BE%E3%83%BC%E3%83%8A%E5%B7%9D%E5%B4%8E%E3%83%97%E3%83%A9%E3%82%B6%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="atre">
+      <div class="building__head">
+        <h2>アトレ川崎</h2>
+        <p class="building__meta">川崎駅東口直結／<a href="https://tabelog.com/kanagawa/P007274/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/atre/14007648.jpg" alt="川崎こてがえし" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14007648/" target="_blank" rel="noopener">川崎こてがえし</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">8F</span>
+              <span class="store-card__genre">お好み焼き・焼肉・もんじゃ焼き</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%B7%9D%E5%B4%8E%E3%81%93%E3%81%A6%E3%81%8C%E3%81%88%E3%81%97%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/atre/14055369.jpg" alt="肉食べ放題BBQビアガーデン アトレ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14055369/" target="_blank" rel="noopener">肉食べ放題BBQビアガーデン アトレ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">ビアガーデン・バーベキュー・焼肉</span>
+              <span class="store-card__budget">¥5,000〜¥5,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%82%89%E9%A3%9F%E3%81%B9%E6%94%BE%E9%A1%8CBBQ%E3%83%93%E3%82%A2%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/atre/14070462.jpg" alt="トラットリア ターヴォラ アトレ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14070462/" target="_blank" rel="noopener">トラットリア ターヴォラ アトレ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">4F</span>
+              <span class="store-card__genre">イタリアン・ピザ・ワインバー</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%88%E3%83%A9%E3%83%83%E3%83%88%E3%83%AA%E3%82%A2%20%E3%82%BF%E3%83%BC%E3%83%B4%E3%82%A9%E3%83%A9%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/atre/14070461.jpg" alt="プロント アトレ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14070461/" target="_blank" rel="noopener">プロント アトレ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">3F</span>
+              <span class="store-card__genre">カフェ・居酒屋・ダイニングバー</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%97%E3%83%AD%E3%83%B3%E3%83%88%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="azalea">
+      <div class="building__head">
+        <h2>川崎アゼリア（地下街）</h2>
+        <p class="building__meta">川崎駅東口直結の地下街／<a href="https://tabelog.com/kanagawa/P005460/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/azalea/14062911.jpg" alt="エビスバー 川崎アゼリア店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14062911/" target="_blank" rel="noopener">エビスバー 川崎アゼリア店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ビアバー・ビアホール・洋食</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A8%E3%83%93%E3%82%B9%E3%83%90%E3%83%BC%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/azalea/14005631.jpg" alt="そじ坊 川崎アゼリア店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14005631/" target="_blank" rel="noopener">そじ坊 川崎アゼリア店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">そば・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%9D%E3%81%98%E5%9D%8A%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/azalea/14005606.jpg" alt="杵屋 川崎アゼリア店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14005606/" target="_blank" rel="noopener">杵屋 川崎アゼリア店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">うどん・そば・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%9D%B5%E5%B1%8B%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/azalea/14033663.jpg" alt="シジャン 川崎アゼリア店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14033663/" target="_blank" rel="noopener">シジャン 川崎アゼリア店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">韓国料理・カフェ・冷麺</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%B7%E3%82%B8%E3%83%A3%E3%83%B3%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/azalea/14005552.jpg" alt="銀座ハゲ天 川崎アゼリア店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14005552/" target="_blank" rel="noopener">銀座ハゲ天 川崎アゼリア店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">天ぷら</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%8A%80%E5%BA%A7%E3%83%8F%E3%82%B2%E5%A4%A9%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%82%A2%E3%82%BC%E3%83%AA%E3%82%A2%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="lufront">
+      <div class="building__head">
+        <h2>川崎ルフロン</h2>
+        <p class="building__meta">川崎駅東口から徒歩約3分／<a href="https://tabelog.com/kanagawa/P014172/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/lufront/14079729.jpg" alt="叙々苑 川崎ルフロン店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14079729/" target="_blank" rel="noopener">叙々苑 川崎ルフロン店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">10F</span>
+              <span class="store-card__genre">焼肉・日本料理・韓国料理</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8F%99%E3%80%85%E8%8B%91%20%E5%B7%9D%E5%B4%8E%E3%83%AB%E3%83%95%E3%83%AD%E3%83%B3%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%83%AB%E3%83%95%E3%83%AD%E3%83%B3%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="muza">
+      <div class="building__head">
+        <h2>ミューザ川崎</h2>
+        <p class="building__meta">川崎駅西口直結（ペデストリアンデッキ）／<a href="https://tabelog.com/kanagawa/P000073/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/muza/14010307.jpg" alt="あしびなー" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14010307/" target="_blank" rel="noopener">あしびなー</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">沖縄料理・居酒屋・郷土料理</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%82%E3%81%97%E3%81%B3%E3%81%AA%E3%83%BC%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/muza/14093422.jpg" alt="串カツ田中 ミューザ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14093422/" target="_blank" rel="noopener">串カツ田中 ミューザ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">串揚げ・居酒屋・うどん</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%B2%E3%82%AB%E3%83%84%E7%94%B0%E4%B8%AD%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/muza/14006175.jpg" alt="鳥元 ミューザ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14006175/" target="_blank" rel="noopener">鳥元 ミューザ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">焼き鳥・居酒屋・親子丼</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%B3%A5%E5%85%83%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/muza/14076617.jpg" alt="居酒屋インドカレー アジア料理チャンドラマ ミューザ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14076617/" target="_blank" rel="noopener">居酒屋インドカレー アジア料理チャンドラマ ミューザ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">インドカレー・居酒屋・アジア・エスニック</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%B1%85%E9%85%92%E5%B1%8B%E3%82%A4%E3%83%B3%E3%83%89%E3%82%AB%E3%83%AC%E3%83%BC%20%E3%82%A2%E3%82%B8%E3%82%A2%E6%96%99%E7%90%86%E3%83%81%E3%83%A3%E3%83%B3%E3%83%89%E3%83%A9%E3%83%9E%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/muza/14021265.jpg" alt="牛角 ミューザ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14021265/" target="_blank" rel="noopener">牛角 ミューザ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">焼肉・ホルモン・韓国料理</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%89%9B%E8%A7%92%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="jrtower">
+      <div class="building__head">
+        <h2>JR川崎タワー（ホテルメトロポリタン川崎ほか）</h2>
+        <p class="building__meta">川崎駅西口直結／<a href="https://tabelog.com/kanagawa/P097423/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/jrtower/14096122.jpg" alt="ラ・ココリコ (ホテルメトロポリタン) 川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14096122/" target="_blank" rel="noopener">ラ・ココリコ (ホテルメトロポリタン) 川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">イタリアン・カフェ・ピザ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%BB%E3%82%B3%E3%82%B3%E3%83%AA%E3%82%B3%20%28%E3%83%9B%E3%83%86%E3%83%AB%E3%83%A1%E3%83%88%E3%83%AD%E3%83%9D%E3%83%AA%E3%82%BF%E3%83%B3%29%20%E5%B7%9D%E5%B4%8E%E5%BA%97%20JR%E5%B7%9D%E5%B4%8E%E3%82%BF%E3%83%AF%E3%83%BC%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/jrtower/14083040.jpg" alt="ナポリの下町食堂 川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14083040/" target="_blank" rel="noopener">ナポリの下町食堂 川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">イタリアン・ピザ・パスタ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%8A%E3%83%9D%E3%83%AA%E3%81%AE%E4%B8%8B%E7%94%BA%E9%A3%9F%E5%A0%82%20%E5%B7%9D%E5%B4%8E%E5%BA%97%20JR%E5%B7%9D%E5%B4%8E%E3%82%BF%E3%83%AF%E3%83%BC%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/jrtower/14083232.jpg" alt="川崎市民食堂魚金-西" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14083232/" target="_blank" rel="noopener">川崎市民食堂魚金-西</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">海鮮・居酒屋・寿司</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%B7%9D%E5%B4%8E%E5%B8%82%E6%B0%91%E9%A3%9F%E5%A0%82%E9%AD%9A%E9%87%91-%E8%A5%BF%20JR%E5%B7%9D%E5%B4%8E%E3%82%BF%E3%83%AF%E3%83%BC%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/jrtower/14083230.jpg" alt="台湾小皿料理 阿里城 JR川崎タワー店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14083230/" target="_blank" rel="noopener">台湾小皿料理 阿里城 JR川崎タワー店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">台湾料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8F%B0%E6%B9%BE%E5%B0%8F%E7%9A%BF%E6%96%99%E7%90%86%20%E9%98%BF%E9%87%8C%E5%9F%8E%20JR%E5%B7%9D%E5%B4%8E%E3%82%BF%E3%83%AF%E3%83%BC%E5%BA%97%20JR%E5%B7%9D%E5%B4%8E%E3%82%BF%E3%83%AF%E3%83%BC%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/jrtower/14078992.jpg" alt="過門香 點 ホテルメトロポリタン川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14078992/" target="_blank" rel="noopener">過門香 點 ホテルメトロポリタン川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">中華料理・小籠包・担々麺</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%81%8E%E9%96%80%E9%A6%99%20%E9%BB%9E%20%E3%83%9B%E3%83%86%E3%83%AB%E3%83%A1%E3%83%88%E3%83%AD%E3%83%9D%E3%83%AA%E3%82%BF%E3%83%B3%E5%B7%9D%E5%B4%8E%E5%BA%97%20JR%E5%B7%9D%E5%B4%8E%E3%82%BF%E3%83%AF%E3%83%BC%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/jrtower/14079061.jpg" alt="Terrace and Table" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14079061/" target="_blank" rel="noopener">Terrace and Table</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ビュッフェ・イタリアン・日本料理</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Terrace%20and%20Table%20JR%E5%B7%9D%E5%B4%8E%E3%82%BF%E3%83%AF%E3%83%BC%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="dice">
+      <div class="building__head">
+        <h2>川崎ダイス</h2>
+        <p class="building__meta">川崎駅東口すぐ（京急川崎駅からも至近）／<a href="https://tabelog.com/kanagawa/P058738/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/dice/14007110.jpg" alt="隠れ房 川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14007110/" target="_blank" rel="noopener">隠れ房 川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">7F</span>
+              <span class="store-card__genre">居酒屋・しゃぶしゃぶ・海鮮</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%9A%A0%E3%82%8C%E6%88%BF%20%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%83%80%E3%82%A4%E3%82%B9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/dice/14004777.jpg" alt="イタリアンダイニングDONA 川崎ダイス店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14004777/" target="_blank" rel="noopener">イタリアンダイニングDONA 川崎ダイス店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">パスタ・ピザ・イタリアン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A4%E3%82%BF%E3%83%AA%E3%82%A2%E3%83%B3%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0DONA%20%E5%B7%9D%E5%B4%8E%E3%83%80%E3%82%A4%E3%82%B9%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%83%80%E3%82%A4%E3%82%B9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/dice/14049302.jpg" alt="神戸元町ドリア 川崎ダイス店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14049302/" target="_blank" rel="noopener">神戸元町ドリア 川崎ダイス店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">6F</span>
+              <span class="store-card__genre">洋食・オムライス・チーズ料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%A5%9E%E6%88%B8%E5%85%83%E7%94%BA%E3%83%89%E3%83%AA%E3%82%A2%20%E5%B7%9D%E5%B4%8E%E3%83%80%E3%82%A4%E3%82%B9%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%83%80%E3%82%A4%E3%82%B9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="river">
+      <div class="building__head">
+        <h2>川崎駅前タワーリバーク</h2>
+        <p class="building__meta">川崎駅東口から徒歩約2分（直結ではありません）／<a href="https://tabelog.com/kanagawa/P052611/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/river/14001575.jpg" alt="北の味紀行と地酒 北海道 川崎駅前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14001575/" target="_blank" rel="noopener">北の味紀行と地酒 北海道 川崎駅前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">22F</span>
+              <span class="store-card__genre">居酒屋・海鮮・鍋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8C%97%E3%81%AE%E5%91%B3%E7%B4%80%E8%A1%8C%E3%81%A8%E5%9C%B0%E9%85%92%20%E5%8C%97%E6%B5%B7%E9%81%93%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E3%82%BF%E3%83%AF%E3%83%BC%E3%83%AA%E3%83%90%E3%83%BC%E3%82%AF%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/river/14040090.jpg" alt="博多もつ鍋 馬肉 九州自慢 川崎駅前リバークビル店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14040090/" target="_blank" rel="noopener">博多もつ鍋 馬肉 九州自慢 川崎駅前リバークビル店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">居酒屋・もつ鍋・餃子</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%9A%E5%A4%9A%E3%82%82%E3%81%A4%E9%8D%8B%20%E9%A6%AC%E8%82%89%20%E4%B9%9D%E5%B7%9E%E8%87%AA%E6%85%A2%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E3%83%AA%E3%83%90%E3%83%BC%E3%82%AF%E3%83%93%E3%83%AB%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E3%82%BF%E3%83%AF%E3%83%BC%E3%83%AA%E3%83%90%E3%83%BC%E3%82%AF%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/river/14000011.jpg" alt="がちま家 川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14000011/" target="_blank" rel="noopener">がちま家 川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">B1F</span>
+              <span class="store-card__genre">居酒屋・沖縄料理</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%8C%E3%81%A1%E3%81%BE%E5%AE%B6%20%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E3%82%BF%E3%83%AF%E3%83%BC%E3%83%AA%E3%83%90%E3%83%BC%E3%82%AF%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="building" id="cittadella">
+      <div class="building__head">
+        <h2>ラ チッタデッラ（チネチッタ周辺）</h2>
+        <p class="building__meta">川崎駅東口から徒歩約5分（直結ではありません）／<a href="https://tabelog.com/kanagawa/P020898/premiseLst/cond11-00-00/RC/?Cat=RC&SrtT=trend" target="_blank" rel="noopener">食べログでネット予約できるお店一覧を見る</a></p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/cittadella/14084725.jpg" alt="韓国料理&amp;BBQ ペゴッパヨ 川崎本店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14084725/" target="_blank" rel="noopener">韓国料理&amp;BBQ ペゴッパヨ 川崎本店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">韓国料理・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%9F%93%E5%9B%BD%E6%96%99%E7%90%86%26BBQ%20%E3%83%9A%E3%82%B4%E3%83%83%E3%83%91%E3%83%A8%20%E5%B7%9D%E5%B4%8E%E6%9C%AC%E5%BA%97%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/cittadella/14100713.jpg" alt="マロリーポークステーキ 川崎 ラ チッタ デッラ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14100713/" target="_blank" rel="noopener">マロリーポークステーキ 川崎 ラ チッタ デッラ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">2F</span>
+              <span class="store-card__genre">ステーキ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9E%E3%83%AD%E3%83%AA%E3%83%BC%E3%83%9D%E3%83%BC%E3%82%AF%E3%82%B9%E3%83%86%E3%83%BC%E3%82%AD%20%E5%B7%9D%E5%B4%8E%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%20%E3%83%87%E3%83%83%E3%83%A9%E5%BA%97%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/cittadella/14073299.jpg" alt="ラプチフロマージェリー～小さなチーズの店～" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14073299/" target="_blank" rel="noopener">ラプチフロマージェリー～小さなチーズの店～</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">チーズ料理・バル・イタリアン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%97%E3%83%81%E3%83%95%E3%83%AD%E3%83%9E%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%AA%E3%83%BC%EF%BD%9E%E5%B0%8F%E3%81%95%E3%81%AA%E3%83%81%E3%83%BC%E3%82%BA%E3%81%AE%E5%BA%97%EF%BD%9E%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/cittadella/14060410.jpg" alt="銀座方舟 川崎ラチッタデッラ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14060410/" target="_blank" rel="noopener">銀座方舟 川崎ラチッタデッラ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">日本酒バー・居酒屋・海鮮</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%8A%80%E5%BA%A7%E6%96%B9%E8%88%9F%20%E5%B7%9D%E5%B4%8E%E3%83%A9%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%E5%BA%97%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/cittadella/14091934.jpg" alt="ケララ キッチン 川崎ラ チッタ デッラ店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14091934/" target="_blank" rel="noopener">ケララ キッチン 川崎ラ チッタ デッラ店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">インド料理・インドカレー</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%B1%E3%83%A9%E3%83%A9%20%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3%20%E5%B7%9D%E5%B4%8E%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%20%E3%83%87%E3%83%83%E3%83%A9%E5%BA%97%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/cittadella/14092343.jpg" alt="Lanapia Hawaiian cafe &amp; dining" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14092343/" target="_blank" rel="noopener">Lanapia Hawaiian cafe &amp; dining</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">1F</span>
+              <span class="store-card__genre">ハワイ料理・カフェ・ダイニングバー</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Lanapia%20Hawaiian%20cafe%20%26%20dining%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="kawasaki-photos/cittadella/14029598.jpg" alt="アルカサール ラ・チッタデッラ川崎店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/kanagawa/A1405/A140501/14029598/" target="_blank" rel="noopener">アルカサール ラ・チッタデッラ川崎店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">—</span>
+              <span class="store-card__genre">ハンバーグ・ステーキ・鉄板焼き</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%AB%E3%82%AB%E3%82%B5%E3%83%BC%E3%83%AB%20%E3%83%A9%E3%83%BB%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%83%A9%20%E3%83%81%E3%83%83%E3%82%BF%E3%83%87%E3%83%83%E3%83%A9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Hot Pepper側もあわせて確認する場合は、<a href="https://www.hotpepper.jp/SA11/Y070/net1/" target="_blank" rel="noopener">Hot Pepperグルメ「川崎 ネット予約できるお店」</a>で店名検索してください。カフェ・フードコート単体の店は掲載していません。川崎駅前タワーリバークとラ チッタデッラは直結ではありませんが、店舗数が少ないため加えています。
+    </p>
+  </main>
+  <script>
+  (function () {
+    var GENRE_KEYWORDS = {
+      japanese: ['日本料理', '懐石'],
+      seafood: ['海鮮', '寿司', '牡蠣', 'オイスター', 'うなぎ', 'シーフード'],
+      yakiniku: ['焼肉', '韓国料理', 'ホルモン', '冷麺'],
+      shabu: ['すき焼き', 'しゃぶしゃぶ', 'しゃぶ'],
+      chinese: ['中華', '小籠包', '飲茶', '四川', '台湾料理'],
+      izakaya: ['居酒屋'],
+      soba: ['そば', 'うどん', '天ぷら'],
+      italian: ['イタリア', 'パスタ', 'ピザ'],
+      french: ['フレンチ', 'ビストロ', '洋食', 'ヨーロッパ', 'オムライス'],
+      steak: ['ステーキ', '鉄板焼き'],
+      cafe: ['カフェ', 'スイーツ', 'ケーキ', 'パンケーキ', 'ビュッフェ'],
+      beer: ['ビア'],
+      ethnic: ['タイ料理', 'ベトナム', 'インド', 'ネパール', 'エスニック', 'アジア'],
+      okinawa: ['沖縄', 'ハワイアン'],
+      other: ['シュラスコ', 'ブラジル', 'メキシコ', '串揚げ', '牛タン', '食堂', '豆腐料理', 'ジンギスカン', 'ドイツ料理']
+    };
+
+    function inBudgetRange(min, key) {
+      if (min === null) return false;
+      switch (key) {
+        case 'lt1000': return min < 1000;
+        case '1000-1999': return min >= 1000 && min < 2000;
+        case '2000-2999': return min >= 2000 && min < 3000;
+        case '3000-4999': return min >= 3000 && min < 5000;
+        case 'gte5000': return min >= 5000;
+        default: return false;
+      }
+    }
+
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.store-card'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('.building'));
+    var genreChips = Array.prototype.slice.call(document.querySelectorAll('#filter-genre input'));
+    var budgetChips = Array.prototype.slice.call(document.querySelectorAll('#filter-budget input'));
+    var resetButton = document.getElementById('filter-reset');
+    var countEl = document.getElementById('filter-count');
+
+    var entries = cards.map(function (card) {
+      var genreEl = card.querySelector('.store-card__genre');
+      var budgetEl = card.querySelector('.store-card__budget');
+      var budgetMatch = budgetEl ? budgetEl.textContent.match(/[\d,]+/) : null;
+      return {
+        card: card,
+        section: card.closest('.building'),
+        genre: genreEl ? genreEl.textContent : '',
+        budgetMin: budgetMatch ? parseInt(budgetMatch[0].replace(/,/g, ''), 10) : null
+      };
+    });
+
+    function checkedValues(chips) {
+      return chips.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+    }
+
+    function applyFilter() {
+      var selectedGenres = checkedValues(genreChips);
+      var selectedBudgets = checkedValues(budgetChips);
+      var visibleCount = 0;
+
+      entries.forEach(function (e) {
+        var genreOk = selectedGenres.length === 0 || selectedGenres.some(function (key) {
+          return GENRE_KEYWORDS[key].some(function (kw) { return e.genre.indexOf(kw) !== -1; });
+        });
+        var budgetOk = selectedBudgets.length === 0 || selectedBudgets.some(function (key) {
+          return inBudgetRange(e.budgetMin, key);
+        });
+        var matches = genreOk && budgetOk;
+        e.card.style.display = matches ? '' : 'none';
+        if (matches) visibleCount++;
+      });
+
+      sections.forEach(function (section) {
+        var anyVisible = Array.prototype.some.call(
+          section.querySelectorAll('.store-card'),
+          function (c) { return c.style.display !== 'none'; }
+        );
+        section.style.display = anyVisible ? '' : 'none';
+      });
+
+      countEl.textContent = visibleCount + ' / ' + entries.length + ' 件表示中';
+    }
+
+    genreChips.concat(budgetChips).forEach(function (chip) {
+      chip.addEventListener('change', applyFilter);
+    });
+    resetButton.addEventListener('click', function () {
+      genreChips.concat(budgetChips).forEach(function (c) { c.checked = false; });
+      applyFilter();
+    });
+
+    applyFilter();
+  })();
+  </script>
+</body>
+</html>
+
