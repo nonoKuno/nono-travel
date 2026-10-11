@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="新宿御苑周辺のレストランのうち、食べログでネット予約ができ、ランチ予算が登録されている店の一覧">
+  <title>新宿御苑付近レストラン一覧（ランチ ネット予約可）</title>
+  <style>
+    :root { color-scheme: light; --ink:#243247; --muted:#617089; --line:#dbe3ee; --surface:#fff; --canvas:#f3f6fa; --brand:#176b87; --brand-dark:#0d4e65; --shadow:0 12px 30px rgba(24,49,78,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",sans-serif; line-height:1.7; }
+    a { color:var(--brand-dark); }
+    a:focus-visible { outline:3px solid #f4b942; outline-offset:3px; border-radius:4px; }
+    .hero { padding:3.5rem 1.25rem 3rem; color:#fff; background:linear-gradient(135deg,#0d5068,#1b7d87 58%,#77a9a2); }
+    .hero__inner, main { max-width:1080px; margin:0 auto; }
+    .eyebrow { margin:0 0 .4rem; font-size:.82rem; font-weight:700; letter-spacing:.12em; opacity:.86; }
+    h1 { margin:0; font-size:clamp(1.5rem,4vw,2.3rem); line-height:1.3; }
+    .lead { max-width:44rem; margin:1rem 0 0; color:#e4f3f3; font-size:.95rem; }
+    .jump-nav { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; }
+    .jump-nav a { padding:.32rem .65rem; color:#fff; text-decoration:none; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:.84rem; }
+    .jump-nav a:hover { background:rgba(255,255,255,.16); }
+    main { padding:2rem 1.25rem 4rem; }
+    .note { margin:0 0 1.75rem; padding:.9rem 1rem; color:#5d4c25; background:#fff9e9; border-left:4px solid #e4b94e; font-size:.87rem; }
+    .note p { margin:.35rem 0; }
+    .note p:first-child { margin-top:0; }
+    .note p:last-child { margin-bottom:0; }
+    .building { margin:0 0 1.75rem; overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .building__head { padding:1.1rem 1.4rem 1rem; background:#edf7f7; border-bottom:1px solid var(--line); }
+    .building__head h2 { margin:0; font-size:1.2rem; }
+    .building__meta { margin:.35rem 0 0; color:var(--muted); font-size:.85rem; }
+    .building__meta a { font-weight:700; }
+    .store-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; padding:1.1rem 1.4rem 1.4rem; }
+    .store-card { display:flex; flex-direction:column; overflow:hidden; background:var(--canvas); border:1px solid var(--line); border-radius:12px; }
+    .store-card__photo { display:block; width:100%; height:220px; object-fit:cover; background:#e7edf3; }
+    .store-card__body { padding:.75rem .9rem .9rem; }
+    .store-card__name { margin:0; font-size:1rem; font-weight:700; line-height:1.4; }
+    .store-card__row { display:flex; flex-wrap:wrap; gap:.4rem .7rem; margin-top:.4rem; font-size:.85rem; }
+    .store-card__floor { color:var(--brand-dark); font-weight:700; }
+    .store-card__genre { color:var(--muted); }
+    .store-card__budget { color:var(--brand-dark); font-weight:700; }
+    .store-card__map { margin-top:.55rem; }
+    .store-card__map a { display:inline-block; text-decoration:none; font-size:.82rem; padding:.3rem .65rem; border:1px solid var(--line); border-radius:6px; background:#fff; }
+    .store-card__map a:hover { background:#edf7f7; }
+    .both-badge { display:inline-block; margin-left:.4rem; padding:.05rem .4rem; color:#0d4e65; background:#dff1f4; border-radius:4px; font-size:.68rem; font-weight:700; vertical-align:.1em; }
+    .footer-note { margin:1.5rem 0 0; color:var(--muted); font-size:.85rem; }
+    .footer-note a { font-weight:700; }
+    .filter-bar { margin:0 0 1.75rem; padding:1rem 1.4rem 1.2rem; background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+    .filter-bar__group { margin:0 0 .9rem; border:0; padding:0; }
+    .filter-bar__group:last-of-type { margin-bottom:0; }
+    .filter-bar__group legend { padding:0 0 .4rem; font-size:.8rem; color:var(--muted); font-weight:700; }
+    .filter-chips { display:flex; flex-wrap:wrap; gap:.45rem; }
+    .filter-chip input { position:absolute; opacity:0; width:1px; height:1px; }
+    .filter-chip span { display:inline-block; padding:.32rem .75rem; color:var(--ink); background:#fff; border:1px solid var(--line); border-radius:999px; font-size:.82rem; cursor:pointer; user-select:none; }
+    .filter-chip input:checked + span { color:#fff; background:var(--brand-dark); border-color:var(--brand-dark); }
+    .filter-chip input:focus-visible + span { outline:3px solid #f4b942; outline-offset:2px; }
+    .filter-bar__footer { display:flex; align-items:center; gap:.9rem; margin-top:1rem; }
+    .filter-bar__reset { padding:.4rem .8rem; color:var(--brand-dark); background:#edf7f7; border:1px solid var(--line); border-radius:8px; font-size:.85rem; cursor:pointer; }
+    .filter-bar__reset:hover { background:#dff1f4; }
+    .filter-bar__count { margin-left:auto; font-size:.85rem; color:var(--brand-dark); font-weight:700; white-space:nowrap; }
+    @media (max-width:640px) {
+      .hero{padding:2.5rem 1rem 2.2rem;} main{padding:1.25rem .75rem 3rem;}
+      .store-grid { grid-template-columns:1fr; padding:.9rem .9rem 1.1rem; gap:.8rem; }
+      .store-card__photo { height:190px; }
+      .filter-bar { padding:.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero__inner">
+    <p class="eyebrow">SHINJUKU GYOEN</p>
+    <h1>新宿御苑付近レストラン一覧（ランチ ネット予約可）</h1>
+    <p class="lead">新宿御苑エリアのレストランのうち、食べログの「ネット予約できるお店」フィルターで実際にヒットするランチ営業の店で、かつ「昼の予算」が登録されている店を、新宿御苑前駅からの距離順に掲載しています（63件）。店名は食べログの店舗ページにリンクしています。</p>
+    <nav class="jump-nav" aria-label="エリアへのリンク">
+      <a href="#near">新宿御苑前駅 〜150m（20）</a>
+      <a href="#mid">新宿御苑前駅 151〜250m（23）</a>
+      <a href="#far">新宿御苑前駅 251m〜（16）</a>
+      <a href="#other">他駅の方が近い店（4）</a>
+    </nav>
+  </div></header>
+  <main>
+    <section class="filter-bar" aria-label="絞り込み">
+      <fieldset class="filter-bar__group">
+        <legend>ジャンル（複数選択可）</legend>
+        <div class="filter-chips" id="filter-genre">
+          <label class="filter-chip"><input type="checkbox" value="japanese"><span>日本料理・水炊き・郷土料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="seafood"><span>海鮮・寿司・うなぎ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="yakiniku"><span>焼肉・韓国料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="shabu"><span>すき焼き・しゃぶしゃぶ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="chinese"><span>中華料理</span></label>
+          <label class="filter-chip"><input type="checkbox" value="ramen"><span>ラーメン・担々麺</span></label>
+          <label class="filter-chip"><input type="checkbox" value="izakaya"><span>居酒屋・焼き鳥</span></label>
+          <label class="filter-chip"><input type="checkbox" value="soba"><span>そば・うどん・天ぷら</span></label>
+          <label class="filter-chip"><input type="checkbox" value="italian"><span>イタリアン・パスタ・ピザ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="french"><span>ビストロ・洋食・ハンバーグ</span></label>
+          <label class="filter-chip"><input type="checkbox" value="steak"><span>ステーキ・鉄板焼き</span></label>
+          <label class="filter-chip"><input type="checkbox" value="cafe"><span>カフェ・おにぎり</span></label>
+          <label class="filter-chip"><input type="checkbox" value="ethnic"><span>エスニック・タコス</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="filter-bar__group">
+        <legend>予算・ランチ（複数選択可）</legend>
+        <div class="filter-chips" id="filter-budget">
+          <label class="filter-chip"><input type="checkbox" value="lt1000"><span>〜¥999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="1000-1999"><span>¥1,000〜¥1,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="2000-2999"><span>¥2,000〜¥2,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="3000-4999"><span>¥3,000〜¥4,999</span></label>
+          <label class="filter-chip"><input type="checkbox" value="gte5000"><span>¥5,000〜</span></label>
+        </div>
+      </fieldset>
+      <div class="filter-bar__footer">
+        <button type="button" class="filter-bar__reset" id="filter-reset">条件をリセット</button>
+        <p class="filter-bar__count" id="filter-count" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <div class="note">
+      <p><strong>掲載基準：</strong>食べログ「新宿御苑」エリアの「ランチ」一覧に「ネット予約できるお店」フィルター（cond11）を適用して表示された店舗のうち、食べログに「昼の予算」が登録されている店舗を掲載しています（2026年10月時点）。ランチ営業の曜日・時間帯、ランチ枠でのネット予約可否は各店舗ページでご確認ください。</p>
+      <p>距離は食べログに表示された最寄り駅からの直線距離です。写真は食べログ掲載の店舗写真で、写真の無い店は写真欄を省いています。</p>
+      <p>営業時間・予約可否・価格は変動するため、予約前に必ず最新情報をご確認ください。</p>
+    </div>
+
+    <section class="building" id="near">
+      <div class="building__head">
+        <h2>新宿御苑前駅 〜150m</h2>
+        <p class="building__meta">駅からの直線距離（食べログ表記）の近い順</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13326592.jpg" alt="生簀料理と痛風割烹 伊達 新宿御苑前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13326592/" target="_blank" rel="noopener">生簀料理と痛風割烹 伊達 新宿御苑前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 69m</span>
+              <span class="store-card__genre">居酒屋・海鮮・日本料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%94%9F%E7%B0%80%E6%96%99%E7%90%86%E3%81%A8%E7%97%9B%E9%A2%A8%E5%89%B2%E7%83%B9%20%E4%BC%8A%E9%81%94%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13211257.jpg" alt="和心蕎花" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13211257/" target="_blank" rel="noopener">和心蕎花</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 76m</span>
+              <span class="store-card__genre">そば・日本料理・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%92%8C%E5%BF%83%E8%95%8E%E8%8A%B1%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13044258.jpg" alt="小屋" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13044258/" target="_blank" rel="noopener">小屋</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 76m</span>
+              <span class="store-card__genre">韓国料理・焼肉・居酒屋</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%B0%8F%E5%B1%8B%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13285858.jpg" alt="GOOD MUNCHIES 新宿御苑本店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13285858/" target="_blank" rel="noopener">GOOD MUNCHIES 新宿御苑本店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 80m</span>
+              <span class="store-card__genre">ハンバーガー・ダイニングバー・カフェ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=GOOD%20MUNCHIES%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E6%9C%AC%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13030161.jpg" alt="炉端焼　魚然 新宿店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13030161/" target="_blank" rel="noopener">炉端焼　魚然 新宿店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 88m</span>
+              <span class="store-card__genre">居酒屋・海鮮・ろばた焼き</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%82%89%E7%AB%AF%E7%84%BC%E3%80%80%E9%AD%9A%E7%84%B6%20%E6%96%B0%E5%AE%BF%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13274339.jpg" alt="新宿御苑前 鮨らぼ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13274339/" target="_blank" rel="noopener">新宿御苑前 鮨らぼ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 94m</span>
+              <span class="store-card__genre">寿司・日本料理・海鮮</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D%20%E9%AE%A8%E3%82%89%E3%81%BC%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13219050.jpg" alt="COPA Dining&amp;Lounge" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13219050/" target="_blank" rel="noopener">COPA Dining&amp;Lounge</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 95m</span>
+              <span class="store-card__genre">イタリアン・ピザ・ダイニングバー</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=COPA%20Dining%26Lounge%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13214561.jpg" alt="中華居酒屋 福錦 新宿御苑前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13214561/" target="_blank" rel="noopener">中華居酒屋 福錦 新宿御苑前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 96m</span>
+              <span class="store-card__genre">中華料理・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%8F%AF%E5%B1%85%E9%85%92%E5%B1%8B%20%E7%A6%8F%E9%8C%A6%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13240518.jpg" alt="鮨居酒屋 みかづき" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13240518/" target="_blank" rel="noopener">鮨居酒屋 みかづき</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 109m</span>
+              <span class="store-card__genre">寿司・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%AE%A8%E5%B1%85%E9%85%92%E5%B1%8B%20%E3%81%BF%E3%81%8B%E3%81%A5%E3%81%8D%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13301731.jpg" alt="関西風地焼きうなぎとひつまぶし 天ノ箔" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13301731/" target="_blank" rel="noopener">関西風地焼きうなぎとひつまぶし 天ノ箔</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 111m</span>
+              <span class="store-card__genre">うなぎ・居酒屋</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%96%A2%E8%A5%BF%E9%A2%A8%E5%9C%B0%E7%84%BC%E3%81%8D%E3%81%86%E3%81%AA%E3%81%8E%E3%81%A8%E3%81%B2%E3%81%A4%E3%81%BE%E3%81%B6%E3%81%97%20%E5%A4%A9%E3%83%8E%E7%AE%94%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13317906.jpg" alt="麻辣堂 新宿店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13317906/" target="_blank" rel="noopener">麻辣堂 新宿店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 112m</span>
+              <span class="store-card__genre">中華料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%BA%BB%E8%BE%A3%E5%A0%82%20%E6%96%B0%E5%AE%BF%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13221407.jpg" alt="てけてけ 新宿御苑店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13221407/" target="_blank" rel="noopener">てけてけ 新宿御苑店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 114m</span>
+              <span class="store-card__genre">居酒屋・焼き鳥・食堂</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%A6%E3%81%91%E3%81%A6%E3%81%91%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13313416.jpg" alt="遊牧ラム焼き スヨリト" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13313416/" target="_blank" rel="noopener">遊牧ラム焼き スヨリト</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 119m</span>
+              <span class="store-card__genre">中華料理・ジンギスカン・飲茶・点心</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%81%8A%E7%89%A7%E3%83%A9%E3%83%A0%E7%84%BC%E3%81%8D%20%E3%82%B9%E3%83%A8%E3%83%AA%E3%83%88%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13024761.jpg" alt="御苑前 せお" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13024761/" target="_blank" rel="noopener">御苑前 せお</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 128m</span>
+              <span class="store-card__genre">日本料理・そば</span>
+              <span class="store-card__budget">¥8,000〜¥9,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%BE%A1%E8%8B%91%E5%89%8D%20%E3%81%9B%E3%81%8A%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13041176.jpg" alt="ハンバーグ ウィル" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13041176/" target="_blank" rel="noopener">ハンバーグ ウィル</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 136m</span>
+              <span class="store-card__genre">ハンバーグ・洋食・豚料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%8F%E3%83%B3%E3%83%90%E3%83%BC%E3%82%B0%20%E3%82%A6%E3%82%A3%E3%83%AB%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13302178.jpg" alt="NIGICHA" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13302178/" target="_blank" rel="noopener">NIGICHA</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 145m</span>
+              <span class="store-card__genre">おにぎり・カフェ・スイーツ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=NIGICHA%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13174128.jpg" alt="okudo 東京" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13174128/" target="_blank" rel="noopener">okudo 東京</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 146m</span>
+              <span class="store-card__genre">アジア・エスニック・担々麺</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=okudo%20%E6%9D%B1%E4%BA%AC%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13282222.jpg" alt="tacos trap&#x27;" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13282222/" target="_blank" rel="noopener">tacos trap&#x27;</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 146m</span>
+              <span class="store-card__genre">タコス・メキシコ料理・バー</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=tacos%20trap%27%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13000946.jpg" alt="Italian Restaurant AUREOLE" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13000946/" target="_blank" rel="noopener">Italian Restaurant AUREOLE</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 147m</span>
+              <span class="store-card__genre">イタリアン・ステーキ・肉料理</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Italian%20Restaurant%20AUREOLE%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13135210.jpg" alt="オステリア イル レオーネ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13135210/" target="_blank" rel="noopener">オステリア イル レオーネ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 149m</span>
+              <span class="store-card__genre">イタリアン・ワインバー・パスタ</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%20%E3%82%A4%E3%83%AB%20%E3%83%AC%E3%82%AA%E3%83%BC%E3%83%8D%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="building" id="mid">
+      <div class="building__head">
+        <h2>新宿御苑前駅 151〜250m</h2>
+        <p class="building__meta">駅からの直線距離（食べログ表記）の近い順</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13004304.jpg" alt="礼華" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13004304/" target="_blank" rel="noopener">礼華</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 154m</span>
+              <span class="store-card__genre">中華料理・イノベーティブ・ワインバー</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%A4%BC%E8%8F%AF%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13311577.jpg" alt="南方急行 中国南部家庭料理の旅" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13311577/" target="_blank" rel="noopener">南方急行 中国南部家庭料理の旅</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 154m</span>
+              <span class="store-card__genre">中華料理・食堂</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%97%E6%96%B9%E6%80%A5%E8%A1%8C%20%E4%B8%AD%E5%9B%BD%E5%8D%97%E9%83%A8%E5%AE%B6%E5%BA%AD%E6%96%99%E7%90%86%E3%81%AE%E6%97%85%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13233417.jpg" alt="お好み焼き 山本 新宿御苑本店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13233417/" target="_blank" rel="noopener">お好み焼き 山本 新宿御苑本店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 155m</span>
+              <span class="store-card__genre">お好み焼き・鉄板焼き・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%8A%E5%A5%BD%E3%81%BF%E7%84%BC%E3%81%8D%20%E5%B1%B1%E6%9C%AC%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E6%9C%AC%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13258486.jpg" alt="焼肉幸家 新宿御苑前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13258486/" target="_blank" rel="noopener">焼肉幸家 新宿御苑前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 161m</span>
+              <span class="store-card__genre">焼肉・ホルモン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E8%82%89%E5%B9%B8%E5%AE%B6%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13218404/" target="_blank" rel="noopener">塊肉居酒屋 肉べぇ 新宿御苑店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 164m</span>
+              <span class="store-card__genre">居酒屋・焼肉・焼き鳥</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%A1%8A%E8%82%89%E5%B1%85%E9%85%92%E5%B1%8B%20%E8%82%89%E3%81%B9%E3%81%87%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13238114.jpg" alt="焼鳥しん" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13238114/" target="_blank" rel="noopener">焼鳥しん</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 165m</span>
+              <span class="store-card__genre">焼き鳥</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E9%B3%A5%E3%81%97%E3%82%93%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13288675.jpg" alt="ごまいち 新宿御苑店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13288675/" target="_blank" rel="noopener">ごまいち 新宿御苑店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 167m</span>
+              <span class="store-card__genre">うどん・すき焼き・しゃぶしゃぶ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%94%E3%81%BE%E3%81%84%E3%81%A1%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13209422.jpg" alt="新宿御苑 天ぷら串 山本家" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13209422/" target="_blank" rel="noopener">新宿御苑 天ぷら串 山本家</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 168m</span>
+              <span class="store-card__genre">居酒屋・天ぷら・日本酒バー</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%20%E5%A4%A9%E3%81%B7%E3%82%89%E4%B8%B2%20%E5%B1%B1%E6%9C%AC%E5%AE%B6%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13307215.jpg" alt="tacos trap&#x27; 2号店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13307215/" target="_blank" rel="noopener">tacos trap&#x27; 2号店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 171m</span>
+              <span class="store-card__genre">タコス・メキシコ料理・ダイニングバー</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=tacos%20trap%27%202%E5%8F%B7%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13236271.jpg" alt="洋食 ハンバーグウィル" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13236271/" target="_blank" rel="noopener">洋食 ハンバーグウィル</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 178m</span>
+              <span class="store-card__genre">ハンバーグ・洋食</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%B4%8B%E9%A3%9F%20%E3%83%8F%E3%83%B3%E3%83%90%E3%83%BC%E3%82%B0%E3%82%A6%E3%82%A3%E3%83%AB%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13188432.jpg" alt="ポトフ料理ジョワ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13188432/" target="_blank" rel="noopener">ポトフ料理ジョワ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 187m</span>
+              <span class="store-card__genre">ビストロ・洋食・スープカレー</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%9D%E3%83%88%E3%83%95%E6%96%99%E7%90%86%E3%82%B8%E3%83%A7%E3%83%AF%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13259034.jpg" alt="博多おでんと自然薯 よかよか堂" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13259034/" target="_blank" rel="noopener">博多おでんと自然薯 よかよか堂</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 189m</span>
+              <span class="store-card__genre">居酒屋・日本酒バー・おでん</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%9A%E5%A4%9A%E3%81%8A%E3%81%A7%E3%82%93%E3%81%A8%E8%87%AA%E7%84%B6%E8%96%AF%20%E3%82%88%E3%81%8B%E3%82%88%E3%81%8B%E5%A0%82%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13165441.jpg" alt="カロッツァ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13165441/" target="_blank" rel="noopener">カロッツァ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 193m</span>
+              <span class="store-card__genre">イタリアン・ワインバー・パスタ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%AB%E3%83%AD%E3%83%83%E3%83%84%E3%82%A1%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13244301.jpg" alt="ベトニャット" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13244301/" target="_blank" rel="noopener">ベトニャット</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 205m</span>
+              <span class="store-card__genre">ベトナム料理・アジア・エスニック</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%99%E3%83%88%E3%83%8B%E3%83%A3%E3%83%83%E3%83%88%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13155460.jpg" alt="築地食堂源ちゃん 新宿御苑店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13155460/" target="_blank" rel="noopener">築地食堂源ちゃん 新宿御苑店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 213m</span>
+              <span class="store-card__genre">居酒屋・海鮮・食堂</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E7%AF%89%E5%9C%B0%E9%A3%9F%E5%A0%82%E6%BA%90%E3%81%A1%E3%82%83%E3%82%93%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13324777.jpg" alt="Bearly" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13324777/" target="_blank" rel="noopener">Bearly</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 215m</span>
+              <span class="store-card__genre">イタリアン・カフェ・バー</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Bearly%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13285641.jpg" alt="edelweiss Italian 新宿御苑" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13285641/" target="_blank" rel="noopener">edelweiss Italian 新宿御苑</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 216m</span>
+              <span class="store-card__genre">イタリアン・ワインバー・パスタ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=edelweiss%20Italian%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13086506.jpg" alt="匠　達広" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13086506/" target="_blank" rel="noopener">匠　達広</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 218m</span>
+              <span class="store-card__genre">寿司・日本料理・海鮮</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8C%A0%E3%80%80%E9%81%94%E5%BA%83%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13279624.jpg" alt="Rahmen Eddie" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13279624/" target="_blank" rel="noopener">Rahmen Eddie</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 225m</span>
+              <span class="store-card__genre">ラーメン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Rahmen%20Eddie%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13281835.jpg" alt="博多小皿鉄板 べっぴんしゃん" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13281835/" target="_blank" rel="noopener">博多小皿鉄板 べっぴんしゃん</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 228m</span>
+              <span class="store-card__genre">居酒屋・鉄板焼き・ステーキ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%9A%E5%A4%9A%E5%B0%8F%E7%9A%BF%E9%89%84%E6%9D%BF%20%E3%81%B9%E3%81%A3%E3%81%B4%E3%82%93%E3%81%97%E3%82%83%E3%82%93%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13041657.jpg" alt="アームウッド コテージ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13041657/" target="_blank" rel="noopener">アームウッド コテージ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 231m</span>
+              <span class="store-card__genre">カフェ・ダイニングバー・イタリアン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%BC%E3%83%A0%E3%82%A6%E3%83%83%E3%83%89%20%E3%82%B3%E3%83%86%E3%83%BC%E3%82%B8%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13317761.jpg" alt="酒場 一ノ肴" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13317761/" target="_blank" rel="noopener">酒場 一ノ肴</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 231m</span>
+              <span class="store-card__genre">居酒屋・海鮮・餃子</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%85%92%E5%A0%B4%20%E4%B8%80%E3%83%8E%E8%82%B4%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13000829.jpg" alt="花園町大木戸矢部" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13000829/" target="_blank" rel="noopener">花園町大木戸矢部</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 247m</span>
+              <span class="store-card__genre">そば・日本料理</span>
+              <span class="store-card__budget">¥6,000〜¥7,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%8A%B1%E5%9C%92%E7%94%BA%E5%A4%A7%E6%9C%A8%E6%88%B8%E7%9F%A2%E9%83%A8%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="building" id="far">
+      <div class="building__head">
+        <h2>新宿御苑前駅 251m〜</h2>
+        <p class="building__meta">駅からの直線距離（食べログ表記）の近い順</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13287348/" target="_blank" rel="noopener">新宿御苑イタリアン トラットリアこいこい</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 254m</span>
+              <span class="store-card__genre">バル・イタリアン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E3%82%A4%E3%82%BF%E3%83%AA%E3%82%A2%E3%83%B3%20%E3%83%88%E3%83%A9%E3%83%83%E3%83%88%E3%83%AA%E3%82%A2%E3%81%93%E3%81%84%E3%81%93%E3%81%84%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13240345.jpg" alt="旬肴ふく堀田" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13240345/" target="_blank" rel="noopener">旬肴ふく堀田</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 262m</span>
+              <span class="store-card__genre">ふぐ・日本料理・海鮮</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%97%AC%E8%82%B4%E3%81%B5%E3%81%8F%E5%A0%80%E7%94%B0%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13316122.jpg" alt="大阪町焼肉 しんちゃん 新宿本店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13316122/" target="_blank" rel="noopener">大阪町焼肉 しんちゃん 新宿本店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 271m</span>
+              <span class="store-card__genre">焼肉・居酒屋・ホルモン</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E7%94%BA%E7%84%BC%E8%82%89%20%E3%81%97%E3%82%93%E3%81%A1%E3%82%83%E3%82%93%20%E6%96%B0%E5%AE%BF%E6%9C%AC%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13272123.jpg" alt="御苑茶屋ZUZU 新宿御苑前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13272123/" target="_blank" rel="noopener">御苑茶屋ZUZU 新宿御苑前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 288m</span>
+              <span class="store-card__genre">釜飯・お茶漬け・居酒屋</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%BE%A1%E8%8B%91%E8%8C%B6%E5%B1%8BZUZU%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13274155.jpg" alt="和モダン個室居酒屋 はながこい 新宿御苑前" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13274155/" target="_blank" rel="noopener">和モダン個室居酒屋 はながこい 新宿御苑前</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 297m</span>
+              <span class="store-card__genre">居酒屋・焼き鳥・海鮮</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%92%8C%E3%83%A2%E3%83%80%E3%83%B3%E5%80%8B%E5%AE%A4%E5%B1%85%E9%85%92%E5%B1%8B%20%E3%81%AF%E3%81%AA%E3%81%8C%E3%81%93%E3%81%84%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13274746.jpg" alt="中華料理 福怡軒" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13274746/" target="_blank" rel="noopener">中華料理 福怡軒</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 299m</span>
+              <span class="store-card__genre">中華料理・居酒屋・火鍋</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%8F%AF%E6%96%99%E7%90%86%20%E7%A6%8F%E6%80%A1%E8%BB%92%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13213093.jpg" alt="新宿 牡蠣スター" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13213093/" target="_blank" rel="noopener">新宿 牡蠣スター</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 324m</span>
+              <span class="store-card__genre">オイスターバー・イタリアン・ワインバー</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%AE%BF%20%E7%89%A1%E8%A0%A3%E3%82%B9%E3%82%BF%E3%83%BC%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13293594.jpg" alt="Grill&amp;BBQ OK&#x27;s" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13293594/" target="_blank" rel="noopener">Grill&amp;BBQ OK&#x27;s</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 334m</span>
+              <span class="store-card__genre">肉バル・ステーキ・アメリカ料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=Grill%26BBQ%20OK%27s%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13000884.jpg" alt="シェフス" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13000884/" target="_blank" rel="noopener">シェフス</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 342m</span>
+              <span class="store-card__genre">中華料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%82%B7%E3%82%A7%E3%83%95%E3%82%B9%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13000864.jpg" alt="水たき玄海 本店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13000864/" target="_blank" rel="noopener">水たき玄海 本店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 367m</span>
+              <span class="store-card__genre">水炊き・鳥料理・日本料理</span>
+              <span class="store-card__budget">¥10,000〜¥14,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E6%B0%B4%E3%81%9F%E3%81%8D%E7%8E%84%E6%B5%B7%20%E6%9C%AC%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13034023.jpg" alt="げんかい食堂" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13034023/" target="_blank" rel="noopener">げんかい食堂</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 367m</span>
+              <span class="store-card__genre">鳥料理・親子丼・水炊き</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%92%E3%82%93%E3%81%8B%E3%81%84%E9%A3%9F%E5%A0%82%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13307152.jpg" alt="La Speranza" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13307152/" target="_blank" rel="noopener">La Speranza</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 393m</span>
+              <span class="store-card__genre">イタリアン・パスタ・ワインバー</span>
+              <span class="store-card__budget">¥3,000〜¥3,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=La%20Speranza%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13061793.jpg" alt="チャイニーズダイニング トランプ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13061793/" target="_blank" rel="noopener">チャイニーズダイニング トランプ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 413m</span>
+              <span class="store-card__genre">中華料理</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%81%E3%83%A3%E3%82%A4%E3%83%8B%E3%83%BC%E3%82%BA%E3%83%80%E3%82%A4%E3%83%8B%E3%83%B3%E3%82%B0%20%E3%83%88%E3%83%A9%E3%83%B3%E3%83%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13215669.jpg" alt="ビストロ　マガザン　ルージュ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13215669/" target="_blank" rel="noopener">ビストロ　マガザン　ルージュ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 417m</span>
+              <span class="store-card__genre">ビストロ</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%93%E3%82%B9%E3%83%88%E3%83%AD%E3%80%80%E3%83%9E%E3%82%AC%E3%82%B6%E3%83%B3%E3%80%80%E3%83%AB%E3%83%BC%E3%82%B8%E3%83%A5%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13037605.jpg" alt="中華ごはん れんげ食堂" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13037605/" target="_blank" rel="noopener">中華ごはん れんげ食堂</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 442m</span>
+              <span class="store-card__genre">中華料理・ビュッフェ・居酒屋</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%8F%AF%E3%81%94%E3%81%AF%E3%82%93%20%E3%82%8C%E3%82%93%E3%81%92%E9%A3%9F%E5%A0%82%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13326597.jpg" alt="合 shinjuku" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13326597/" target="_blank" rel="noopener">合 shinjuku</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿御苑前駅 491m</span>
+              <span class="store-card__genre">寿司・居酒屋</span>
+              <span class="store-card__budget">¥4,000〜¥4,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%90%88%20shinjuku%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="building" id="other">
+      <div class="building__head">
+        <h2>他駅の方が近い店</h2>
+        <p class="building__meta">新宿三丁目駅・新宿駅・四谷三丁目駅が最寄りの店（各駅からの距離順）</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13130671.jpg" alt="バル ペロタ" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13130671/" target="_blank" rel="noopener">バル ペロタ</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿三丁目駅 282m</span>
+              <span class="store-card__genre">スペイン料理・居酒屋・イタリアン</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%90%E3%83%AB%20%E3%83%9A%E3%83%AD%E3%82%BF%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13313183.jpg" alt="いづも 新宿" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13313183/" target="_blank" rel="noopener">いづも 新宿</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿駅 329m</span>
+              <span class="store-card__genre">居酒屋・うなぎ・焼き鳥</span>
+              <span class="store-card__budget">¥2,000〜¥2,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%84%E3%81%A5%E3%82%82%20%E6%96%B0%E5%AE%BF%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13220095.jpg" alt="肉汁餃子のダンダダン 新宿三丁目店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13220095/" target="_blank" rel="noopener">肉汁餃子のダンダダン 新宿三丁目店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">新宿三丁目駅 341m</span>
+              <span class="store-card__genre">餃子・居酒屋・中華料理</span>
+              <span class="store-card__budget">〜¥999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%82%89%E6%B1%81%E9%A4%83%E5%AD%90%E3%81%AE%E3%83%80%E3%83%B3%E3%83%80%E3%83%80%E3%83%B3%20%E6%96%B0%E5%AE%BF%E4%B8%89%E4%B8%81%E7%9B%AE%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+        <div class="store-card">
+          <img class="store-card__photo" src="shinjukugyoen-photos/13326236.jpg" alt="ハウディ 新宿御苑前店" loading="lazy">
+          <div class="store-card__body">
+            <p class="store-card__name"><a href="https://tabelog.com/tokyo/A1304/A130402/13326236/" target="_blank" rel="noopener">ハウディ 新宿御苑前店</a></p>
+            <div class="store-card__row">
+              <span class="store-card__floor">四谷三丁目駅 424m</span>
+              <span class="store-card__genre">ダイニングバー・アメリカ料理・肉料理</span>
+              <span class="store-card__budget">¥1,000〜¥1,999</span>
+            </div>
+            <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%83%8F%E3%82%A6%E3%83%87%E3%82%A3%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D%E5%BA%97%20%E6%96%B0%E5%AE%BF%E5%BE%A1%E8%8B%91%E5%89%8D" target="_blank" rel="noopener">Google Map</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      <a href="https://tabelog.com/tokyo/A1304/A130402/rstLst/lunch/cond11-00-00/" target="_blank" rel="noopener">食べログでネット予約できるランチのお店一覧を見る</a>
+    </p>
+  </main>
+  <script>
+  (function () {
+    var GENRE_KEYWORDS = {
+      japanese: ['日本料理', '水炊き', '鳥料理', 'ふぐ', '釜飯', 'お茶漬け', 'おでん', '親子丼'],
+      seafood: ['海鮮', '寿司', '牡蠣', 'オイスター', 'うなぎ'],
+      yakiniku: ['焼肉', '韓国料理', 'ホルモン', 'ジンギスカン'],
+      shabu: ['すき焼き', 'しゃぶしゃぶ'],
+      chinese: ['中華', '飲茶', '点心', '餃子', '火鍋'],
+      ramen: ['ラーメン', '担々麺'],
+      izakaya: ['居酒屋', '焼き鳥', 'ろばた'],
+      soba: ['そば', 'うどん', '天ぷら'],
+      italian: ['イタリアン', 'パスタ', 'ピザ'],
+      french: ['ビストロ', '洋食', 'ハンバーグ', 'スープカレー', 'ハンバーガー', 'アメリカ料理'],
+      steak: ['ステーキ', '鉄板焼き', 'お好み焼き', '肉バル', '肉料理'],
+      cafe: ['カフェ', 'スイーツ', 'おにぎり'],
+      ethnic: ['ベトナム', 'エスニック', 'タコス', 'メキシコ', 'スペイン']
+    };
+
+    function inBudgetRange(min, key) {
+      if (min === null) return false;
+      switch (key) {
+        case 'lt1000': return min < 1000;
+        case '1000-1999': return min >= 1000 && min < 2000;
+        case '2000-2999': return min >= 2000 && min < 3000;
+        case '3000-4999': return min >= 3000 && min < 5000;
+        case 'gte5000': return min >= 5000;
+        default: return false;
+      }
+    }
+
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.store-card'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('.building'));
+    var genreChips = Array.prototype.slice.call(document.querySelectorAll('#filter-genre input'));
+    var budgetChips = Array.prototype.slice.call(document.querySelectorAll('#filter-budget input'));
+    var resetButton = document.getElementById('filter-reset');
+    var countEl = document.getElementById('filter-count');
+
+    var entries = cards.map(function (card) {
+      var genreEl = card.querySelector('.store-card__genre');
+      var budgetEl = card.querySelector('.store-card__budget');
+      var budgetMatch = budgetEl ? budgetEl.textContent.match(/[\d,]+/) : null;
+      return {
+        card: card,
+        section: card.closest('.building'),
+        genre: genreEl ? genreEl.textContent : '',
+        budgetMin: budgetMatch ? parseInt(budgetMatch[0].replace(/,/g, ''), 10) : null
+      };
+    });
+
+    function checkedValues(chips) {
+      return chips.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+    }
+
+    function applyFilter() {
+      var selectedGenres = checkedValues(genreChips);
+      var selectedBudgets = checkedValues(budgetChips);
+      var visibleCount = 0;
+
+      entries.forEach(function (e) {
+        var genreOk = selectedGenres.length === 0 || selectedGenres.some(function (key) {
+          return GENRE_KEYWORDS[key].some(function (kw) { return e.genre.indexOf(kw) !== -1; });
+        });
+        var budgetOk = selectedBudgets.length === 0 || selectedBudgets.some(function (key) {
+          return inBudgetRange(e.budgetMin, key);
+        });
+        var matches = genreOk && budgetOk;
+        e.card.style.display = matches ? '' : 'none';
+        if (matches) visibleCount++;
+      });
+
+      sections.forEach(function (section) {
+        var anyVisible = Array.prototype.some.call(
+          section.querySelectorAll('.store-card'),
+          function (c) { return c.style.display !== 'none'; }
+        );
+        section.style.display = anyVisible ? '' : 'none';
+      });
+
+      countEl.textContent = visibleCount + ' / ' + entries.length + ' 件表示中';
+    }
+
+    genreChips.concat(budgetChips).forEach(function (chip) {
+      chip.addEventListener('change', applyFilter);
+    });
+    resetButton.addEventListener('click', function () {
+      genreChips.concat(budgetChips).forEach(function (c) { c.checked = false; });
+      applyFilter();
+    });
+
+    applyFilter();
+  })();
+  </script>
+</body>
+</html>
+
