@@ -38,6 +38,7 @@
     .store-card__row { display:flex; flex-wrap:wrap; gap:.4rem .7rem; margin-top:.4rem; font-size:.85rem; }
     .store-card__floor { color:var(--brand-dark); font-weight:700; }
     .store-card__genre { color:var(--muted); }
+    .store-card__lunchnote { color:#a15c00; font-weight:700; }
     .store-card__budget { color:var(--brand-dark); font-weight:700; }
     .store-card__map { margin-top:.55rem; }
     .store-card__map a { display:inline-block; text-decoration:none; font-size:.82rem; padding:.3rem .65rem; border:1px solid var(--line); border-radius:6px; background:#fff; }
@@ -122,7 +123,7 @@
     </section>
 
     <div class="note">
-      <p><strong>掲載基準：</strong>食べログの各施設ページで「ネット予約できるお店」フィルター（cond11）とレストランカテゴリを適用し、表示された店舗のうち、食べログに「昼の予算」が登録されている店舗を掲載しています（2026年9月時点）。ランチ営業の有無・時間帯は各店舗ページでご確認ください。Hot Pepper側は未確認です（無いという意味ではありません）。</p>
+      <p><strong>掲載基準：</strong>食べログの各施設ページで「ネット予約できるお店」フィルター（cond11）とレストランカテゴリを適用し、表示された店舗のうち、食べログに「昼の予算」が登録されている店舗を掲載しています（2026年9月時点）。食べログの営業時間で、11〜14時のいずれかの時間帯に営業する曜日がある店舗のみに絞っています（2026年10月確認）。曜日によって昼営業が無い店舗には、カード内に昼営業の曜日を表示しています。Hot Pepper側は未確認です（無いという意味ではありません）。</p>
       <p>フロアは食べログ掲載の住所から読み取ったもので、不明な店舗は「—」としています（フロアが分かる店舗を上から順に並べ、不明な店舗は末尾にまとめています）。写真は食べログ掲載の店舗写真で、写真の無い店は写真欄を省いています。</p>
       <p>営業時間・予約可否・価格は変動するため、予約前に必ず最新情報をご確認ください。</p>
     </div>
@@ -269,6 +270,7 @@
               <span class="store-card__floor">6F</span>
               <span class="store-card__genre">ビアガーデン・バーベキュー・焼肉</span>
               <span class="store-card__budget">¥5,000〜¥5,999</span>
+              <span class="store-card__lunchnote">昼営業：土・日・祝日のみ</span>
             </div>
             <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E8%82%89%E9%A3%9F%E3%81%B9%E6%94%BE%E9%A1%8CBBQ%E3%83%93%E3%82%A2%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E3%82%A2%E3%83%88%E3%83%AC%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
           </div>
@@ -404,6 +406,7 @@
               <span class="store-card__floor">1F</span>
               <span class="store-card__genre">沖縄料理・居酒屋・郷土料理</span>
               <span class="store-card__budget">〜¥999</span>
+              <span class="store-card__lunchnote">昼営業：月・火・水・木・金のみ</span>
             </div>
             <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%82%E3%81%97%E3%81%B3%E3%81%AA%E3%83%BC%20%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B6%E5%B7%9D%E5%B4%8E%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
           </div>
@@ -554,6 +557,7 @@
               <span class="store-card__floor">7F</span>
               <span class="store-card__genre">居酒屋・しゃぶしゃぶ・海鮮</span>
               <span class="store-card__budget">〜¥999</span>
+              <span class="store-card__lunchnote">昼営業：土・日のみ</span>
             </div>
             <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E9%9A%A0%E3%82%8C%E6%88%BF%20%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E3%83%80%E3%82%A4%E3%82%B9%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
           </div>
@@ -599,6 +603,7 @@
               <span class="store-card__floor">22F</span>
               <span class="store-card__genre">居酒屋・海鮮・鍋</span>
               <span class="store-card__budget">¥1,000〜¥1,999</span>
+              <span class="store-card__lunchnote">昼営業：土・日・祝日のみ</span>
             </div>
             <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8C%97%E3%81%AE%E5%91%B3%E7%B4%80%E8%A1%8C%E3%81%A8%E5%9C%B0%E9%85%92%20%E5%8C%97%E6%B5%B7%E9%81%93%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E3%82%BF%E3%83%AF%E3%83%BC%E3%83%AA%E3%83%90%E3%83%BC%E3%82%AF%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
           </div>
@@ -623,6 +628,7 @@
               <span class="store-card__floor">B1F</span>
               <span class="store-card__genre">居酒屋・沖縄料理</span>
               <span class="store-card__budget">〜¥999</span>
+              <span class="store-card__lunchnote">昼営業：月・火・水・木・金のみ</span>
             </div>
             <div class="store-card__map"><a href="https://www.google.com/maps/search/?api=1&query=%E3%81%8C%E3%81%A1%E3%81%BE%E5%AE%B6%20%E5%B7%9D%E5%B4%8E%E5%BA%97%20%E5%B7%9D%E5%B4%8E%E9%A7%85%E5%89%8D%E3%82%BF%E3%83%AF%E3%83%BC%E3%83%AA%E3%83%90%E3%83%BC%E3%82%AF%20%E5%B7%9D%E5%B4%8E%E9%A7%85" target="_blank" rel="noopener">Google Map</a></div>
           </div>
